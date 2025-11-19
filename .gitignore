@@ -374,3 +374,4 @@ Build/
 /csharp/IDL/build-swig
 /csharp/IDL/generated
 /csharp/IDL/include
+/csharp/IDL/Fast-DDS-Gen
