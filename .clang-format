@@ -1,0 +1,10 @@
+BasedOnStyle: Microsoft
+TabWidth: 4
+AlignOperands: Align
+BreakBeforeBinaryOperators: NonAssignment
+BreakConstructorInitializers: BeforeComma
+BreakTemplateDeclarations: Yes
+ColumnLimit: 150
+BinPackArguments: false
+BinPackParameters: false
+InsertBraces: true

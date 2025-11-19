@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FastDDS.Net" Version="0.1.7" />
+  </ItemGroup>
+<ItemGroup>
+	<Compile Include="$(MSBuildThisFileDirectory)\..\..\IDL\include\**\*.cs" />
+</ItemGroup>
+
+	<ItemGroup>
+		<None Include="$(MSBuildThisFileDirectory)\..\..\IDL\bin\*.dll">
+			<Pack>true</Pack>
+			<PackagePath>runtimes\win-x64\native\</PackagePath>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+</Project>

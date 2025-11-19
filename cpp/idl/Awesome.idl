@@ -1,0 +1,5 @@
+struct Awesome 
+{
+    boolean ButAmI;
+};
+

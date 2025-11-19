@@ -1,0 +1,47 @@
+exclude: ^(cpp/idl)
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-json
+      - id: check-xml
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: mixed-line-ending
+      - id: detect-private-key
+      - id: check-case-conflict
+
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.3.0
+    hooks:
+      - id: codespell
+
+  - repo: https://github.com/pocc/pre-commit-hooks
+    rev: v1.3.5
+    hooks:
+      - id: clang-format
+        args: [-i]
+      - id: cpplint
+        args:
+          - --quiet
+          - --linelength=150
+          - --filter=
+            -legal/copyright,
+            -build/include_order,
+            -build/include_subdir,
+            -build/header_guard,
+            -build/c++11,
+            -whitespace/braces,
+            -whitespace/indent,
+            -whitespace/comments,
+            -whitespace/newline,
+            -readability/todo,
+            -build/namespaces
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.2
+    hooks:
+        - id: ruff-check
+          args: [--fix]
+        - id: ruff-format

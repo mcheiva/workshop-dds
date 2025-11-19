@@ -1,0 +1,20 @@
+
+module EIVA
+{
+module Game
+{
+	enum WeaponType
+	{
+		Gun,
+		Shield,
+		SlowField
+	};
+
+	struct WeaponCommand
+	{
+		int32 player_id;
+		WeaponType weapon;
+	};
+}; // namespace Game
+}; // namespace EIVA
+
