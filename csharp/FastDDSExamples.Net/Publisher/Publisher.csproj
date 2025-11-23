@@ -16,4 +16,10 @@
     <ProjectReference Include="..\IDL.Net\IDL.Net.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="EIVAQos.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

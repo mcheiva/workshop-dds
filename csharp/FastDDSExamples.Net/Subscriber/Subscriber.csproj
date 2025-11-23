@@ -11,4 +11,10 @@
     <PackageReference Include="EMW" Version="0.9.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="EIVAQos.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
