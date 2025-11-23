@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EMW" Version="0.9.4" />
+    <PackageReference Include="Eiva.DDSBus" Version="0.1.0" />
   </ItemGroup>
 
   <ItemGroup>
