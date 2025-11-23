@@ -6,7 +6,7 @@ from conan.tools.files import collect_libs
 required_conan_version = ">=2.0.6"
 
 
-class EIVADDSBUSRecipe(ConanFile):
+class EIVAWorkshopRecipe(ConanFile):
     name = "eiva-workshop"
     version = "0.1.0"
     license = "N/A"
