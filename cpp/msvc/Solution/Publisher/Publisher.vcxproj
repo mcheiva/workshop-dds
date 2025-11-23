@@ -134,6 +134,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+	  <None Include="..\config\EIVAQos.xml">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\fastdds.3.3.0\build\fastdds.targets" Condition="Exists('..\packages\fastdds.3.3.0\build\fastdds.targets')" />
