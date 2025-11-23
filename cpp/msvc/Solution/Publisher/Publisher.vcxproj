@@ -126,7 +126,22 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IDL\IDL.vcxproj">
+      <Project>{607cbb70-d27f-4646-846f-8bbc848c7b4f}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\fastdds.3.3.0\build\fastdds.targets" Condition="Exists('..\packages\fastdds.3.3.0\build\fastdds.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\fastdds.3.3.0\build\fastdds.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\fastdds.3.3.0\build\fastdds.targets'))" />
+  </Target>
 </Project>
