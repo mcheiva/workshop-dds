@@ -3,5 +3,5 @@ project(EIVA_WORKSHOP CXX)
 
 find_package(ddsbus CONFIG REQUIRED)
 
-add_subdirectory(idl)
+add_subdirectory(idls)
 add_subdirectory(solution)

@@ -11,12 +11,12 @@ endif()
 set(GENERATED_TYPE_SUPPORT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/)
 
 set (IDL_FILES
-    Awesome.idl
+    idls/Awesome.idl
 )
 
 set(ALL_GENERATED_FILES
-    ${GENERATED_TYPE_SUPPORT_DIR}/AwesomePubSubTypes.cxx
-	${GENERATED_TYPE_SUPPORT_DIR}/AwesomeTypeObjectSupport.cxx
+    ${GENERATED_TYPE_SUPPORT_DIR}/idls/AwesomePubSubTypes.cxx
+	${GENERATED_TYPE_SUPPORT_DIR}/idls/AwesomeTypeObjectSupport.cxx
 )
 
 add_custom_command(

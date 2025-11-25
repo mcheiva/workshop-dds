@@ -376,9 +376,6 @@ Build/
 /csharp/IDL/include
 /csharp/IDL/Fast-DDS-Gen
 /cpp/msvc/Solution/IDL/idls
-/cpp/conan/idl/*.hpp
-/cpp/conan/idl/*.cxx
-/cpp/conan/idl/*.ipp
 cpp/msvc/Solution/Publisher/EIVAQos.xml
 cpp/msvc/Solution/Subscriber/EIVAQos.xml
 cpp/msvc/Solution/DiscoveryServer/EIVAQos.xml
