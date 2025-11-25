@@ -1,4 +1,4 @@
-# You have chosen the C++ way! I salute you
+# You have chosen the C# way! Well... all the power to you!
 
 This repo yatatata
 
