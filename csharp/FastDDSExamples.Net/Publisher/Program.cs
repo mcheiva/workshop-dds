@@ -2,44 +2,47 @@
 using Eiva.DDSBus.Core;
 using FastDDS;
 using IDL;
-using IDL.EIVA.Game;
 using Publisher = Eiva.DDSBus.Publisher;
 
 // ----------- SETUP ----------- //
 
-Eiva.DDSBus.Participant node = new Participant(69);
+Participant node = new Participant(69);
 Publisher publisher = node.CreatePublisher();
-Topic<MoveCommand> topic = node.CreateTopic<IDL.EIVA.Game.MoveCommand>("MCH/EIVA/Game/MoveCommand");
-WriterListener listener = new WriterListener();
-DataWriterQos qos = publisher.GetDefaultDataWriterQos();
-IDataWriter<MoveCommand> writer = publisher.CreateDataWriter(topic, qos, listener);
+Topic<Awesome> topic = node.CreateTopic<Awesome>("MCH/AwesomeTopic");
+
+MyExampleListener listener = new MyExampleListener();
+IDataWriter<Awesome> writer = publisher.CreateDataWriter(topic, listener: listener);
 
 
 
 // ----------- Construct Sample ----------- //
-IDL.EIVA.Game.MoveCommand sample = new IDL.EIVA.Game.MoveCommand();
-sample.player_id(50);
-// ----------- Publish Sample ----------- //
-for (int i = 0; i < 100; i++)
-{
-    Console.WriteLine("Press any key to send a sample...");
-    Console.ReadKey();
-    sample.dir_x(0.5f);
-    sample.dir_y(-1.0f);
-    //sample.latitude(10.0);
-    //sample.id((ulong)i);
-    writer.Publish(sample);
+Awesome sample = new Awesome();
+sample.id(1337);
 
-}
+// ----------- Publish Sample ----------- //
+Console.WriteLine("Press any key to send a sample...");
+Console.ReadKey();
+
+writer.Publish(sample);
+Console.WriteLine($"Published sample with id = { sample.id() }"); 
 
 Console.WriteLine("Press any key to close publisher....");
 Console.ReadKey();
 
-// ----------- EVENT CALLBACKS ---------//
-class WriterListener : Eiva.DDSBus.Core.DataWriterListener
+// ----------- Example Listener Class ----------- //
+class MyExampleListener : Eiva.DDSBus.Core.DataWriterListener
 {
-    public override void OnPublicationMatched(PublicationMatchedStatus info)
+    public override void OnPublicationMatched(FastDDS.PublicationMatchedStatus info)
     {
-        Console.WriteLine($"[Publisher]: Currently connected to [ {info.current_count} ] subscribers!");
+        Console.WriteLine(
+            $"[Publisher] Match status changed: {info.current_count} subscribers(s) connected." +
+            $" {info.total_count} total connection(s)");
+    }
+
+    public override void OnOfferedIncompatibleQos(IncompatibleQosStatus status)
+    {
+        Console.WriteLine(
+            $"[Subscriber] Incompatible QoS requested. Total count: {status.total_count} " +
+            $", last violated policy ID: {status.last_policy_id}");
     }
 }
