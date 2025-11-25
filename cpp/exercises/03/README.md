@@ -63,7 +63,7 @@ ddsbus::fastdds::Topic<AwesomePubSubType> topic = participant.create_topic<Aweso
 MyExampleListener listener;
 ddsbus::fastdds::WaitsetDataReader<AwesomePubSubType> dataReader = subscriber.create_waitset_datareader(topic, &listener);
 ```
-Similarly to the Publisher example, in production code you might instantiate the `WaitsetDataReader` inside the `MyExampleListener` constructor so logging and lifecycle concerns remain co‑located. In that case pass `this` instead of `&listener`. For reference (not explicitly used in the exercises to follow) such an example might look like:
+Similarly to the Publisher example, in production code you might instantiate the `WaitsetDataReader` inside the `MyExampleListener` constructor so logging and lifecycle concerns remain co‑located. In that case pass `this` instead of `&listener`. For reference (not explicitly used in the exercises to follow) such an example might look like. This should be seen as a reference for later, but for now stick to the original listener implementation provided above.
 ```cpp
 class MyExampleCombined : public ddsbus::core::DataReaderListener<Awesome>
 {
@@ -103,3 +103,7 @@ After the user prompts exit, stop the internal thread to allow DDS to exit grace
 // Stop dataReader internals
 dataReader.stop();
 ```
+
+Start the Subscriber and verify that everything compiles. You should now be able to test it with the Publisher that was created in the previous exercise. You should see that the `on_subscription_matched` callback has been called on the subscriber side and that `on_publication_matched` was called on the publisher, this indicates that they are connected and samples should be received and processed in the `on_data_available` callback when your implemented publish flow calls `publish` on the DataWriter.
+
+If everything went well you should have a working two working Pub/Sub applications, you can experiment with altering the IDL to include more nested types or bigger arrays (just remember to bound them! ). In the next exercise we will explore how altering the quality of service settings we omitted in these setup exercises affect the performance.
