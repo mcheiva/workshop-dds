@@ -88,3 +88,12 @@ std::cin.ignore();
 			</rtps>
 		</participant>
 ```
+
+If you completed the XML profile setup from previous exercises, you just have to make sure that you fetch the default qos profile for the publisher and subscriber we created earlier:
+
+```cpp
+eprosima::fastdds::dds::DomainParticipantExtendedQos qos = ddsbus::fastdds::Participant::get_participant_extended_qos_from_default_profile();
+ddsbus::fastdds::Participant participant(qos);
+```
+
+Alter pub/sub flow to import 
