@@ -8,6 +8,12 @@
 		<Platforms>AnyCPU;x64</Platforms>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <Content Include="..\config\EIVAQos.xml" Link="EIVAQos.xml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Eiva.DDSBus" Version="0.1.1" />
   </ItemGroup>
@@ -16,10 +22,5 @@
     <ProjectReference Include="..\IDL.Net\IDL.Net.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="EIVAQos.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 
 </Project>
