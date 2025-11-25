@@ -23,7 +23,7 @@
 #define FAST_DDS_GENERATED__AWESOMECDRAUX_HPP
 
 #include "Awesome.hpp"
-constexpr uint32_t Awesome_max_cdr_typesize {5UL};
+constexpr uint32_t Awesome_max_cdr_typesize {8UL};
 constexpr uint32_t Awesome_max_key_cdr_typesize {0UL};
 
 

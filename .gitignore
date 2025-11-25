@@ -376,3 +376,6 @@ Build/
 /csharp/IDL/include
 /csharp/IDL/Fast-DDS-Gen
 /cpp/msvc/Solution/IDL/idls
+/cpp/conan/idl/*.hpp
+/cpp/conan/idl/*.cxx
+/cpp/conan/idl/*.ipp

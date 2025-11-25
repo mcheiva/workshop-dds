@@ -58,34 +58,34 @@ void register_Awesome_type_identifier(
         header_Awesome = TypeObjectUtils::build_complete_struct_header(TypeIdentifier(), detail_Awesome);
         CompleteStructMemberSeq member_seq_Awesome;
         {
-            TypeIdentifierPair type_ids_ButAmI;
-            ReturnCode_t return_code_ButAmI {eprosima::fastdds::dds::RETCODE_OK};
-            return_code_ButAmI =
+            TypeIdentifierPair type_ids_id;
+            ReturnCode_t return_code_id {eprosima::fastdds::dds::RETCODE_OK};
+            return_code_id =
                 eprosima::fastdds::dds::DomainParticipantFactory::get_instance()->type_object_registry().get_type_identifiers(
-                "_bool", type_ids_ButAmI);
+                "_int32_t", type_ids_id);
 
-            if (eprosima::fastdds::dds::RETCODE_OK != return_code_ButAmI)
+            if (eprosima::fastdds::dds::RETCODE_OK != return_code_id)
             {
                 EPROSIMA_LOG_ERROR(XTYPES_TYPE_REPRESENTATION,
-                        "ButAmI Structure member TypeIdentifier unknown to TypeObjectRegistry.");
+                        "id Structure member TypeIdentifier unknown to TypeObjectRegistry.");
                 return;
             }
-            StructMemberFlag member_flags_ButAmI = TypeObjectUtils::build_struct_member_flag(eprosima::fastdds::dds::xtypes::TryConstructFailAction::DISCARD,
+            StructMemberFlag member_flags_id = TypeObjectUtils::build_struct_member_flag(eprosima::fastdds::dds::xtypes::TryConstructFailAction::DISCARD,
                     false, false, false, false);
-            MemberId member_id_ButAmI = 0x00000000;
-            bool common_ButAmI_ec {false};
-            CommonStructMember common_ButAmI {TypeObjectUtils::build_common_struct_member(member_id_ButAmI, member_flags_ButAmI, TypeObjectUtils::retrieve_complete_type_identifier(type_ids_ButAmI, common_ButAmI_ec))};
-            if (!common_ButAmI_ec)
+            MemberId member_id_id = 0x00000000;
+            bool common_id_ec {false};
+            CommonStructMember common_id {TypeObjectUtils::build_common_struct_member(member_id_id, member_flags_id, TypeObjectUtils::retrieve_complete_type_identifier(type_ids_id, common_id_ec))};
+            if (!common_id_ec)
             {
-                EPROSIMA_LOG_ERROR(XTYPES_TYPE_REPRESENTATION, "Structure ButAmI member TypeIdentifier inconsistent.");
+                EPROSIMA_LOG_ERROR(XTYPES_TYPE_REPRESENTATION, "Structure id member TypeIdentifier inconsistent.");
                 return;
             }
-            MemberName name_ButAmI = "ButAmI";
-            eprosima::fastcdr::optional<AppliedBuiltinMemberAnnotations> member_ann_builtin_ButAmI;
+            MemberName name_id = "id";
+            eprosima::fastcdr::optional<AppliedBuiltinMemberAnnotations> member_ann_builtin_id;
             ann_custom_Awesome.reset();
-            CompleteMemberDetail detail_ButAmI = TypeObjectUtils::build_complete_member_detail(name_ButAmI, member_ann_builtin_ButAmI, ann_custom_Awesome);
-            CompleteStructMember member_ButAmI = TypeObjectUtils::build_complete_struct_member(common_ButAmI, detail_ButAmI);
-            TypeObjectUtils::add_complete_struct_member(member_seq_Awesome, member_ButAmI);
+            CompleteMemberDetail detail_id = TypeObjectUtils::build_complete_member_detail(name_id, member_ann_builtin_id, ann_custom_Awesome);
+            CompleteStructMember member_id = TypeObjectUtils::build_complete_struct_member(common_id, detail_id);
+            TypeObjectUtils::add_complete_struct_member(member_seq_Awesome, member_id);
         }
         CompleteStructType struct_type_Awesome = TypeObjectUtils::build_complete_struct_type(struct_flags_Awesome, header_Awesome, member_seq_Awesome);
         if (eprosima::fastdds::dds::RETCODE_BAD_PARAMETER ==

@@ -37,7 +37,7 @@ class EIVAWorkshopRecipe(ConanFile):
         # self.options["opencv"].with_webp = False
 
     def requirements(self):
-        self.requires("eiva-ddsbus/0.1.0")
+        self.requires("eiva-ddsbus/0.1.1")
 
     def build_requirements(self):
         self.tool_requires("eiva-fast-dds-gen/4.1.0")

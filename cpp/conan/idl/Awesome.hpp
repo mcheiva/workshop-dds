@@ -78,7 +78,7 @@ public:
     eProsima_user_DllExport Awesome(
             const Awesome& x)
     {
-                    m_ButAmI = x.m_ButAmI;
+                    m_id = x.m_id;
 
     }
 
@@ -89,7 +89,7 @@ public:
     eProsima_user_DllExport Awesome(
             Awesome&& x) noexcept
     {
-        m_ButAmI = x.m_ButAmI;
+        m_id = x.m_id;
     }
 
     /*!
@@ -100,7 +100,7 @@ public:
             const Awesome& x)
     {
 
-                    m_ButAmI = x.m_ButAmI;
+                    m_id = x.m_id;
 
         return *this;
     }
@@ -113,7 +113,7 @@ public:
             Awesome&& x) noexcept
     {
 
-        m_ButAmI = x.m_ButAmI;
+        m_id = x.m_id;
         return *this;
     }
 
@@ -124,7 +124,7 @@ public:
     eProsima_user_DllExport bool operator ==(
             const Awesome& x) const
     {
-        return (m_ButAmI == x.m_ButAmI);
+        return (m_id == x.m_id);
     }
 
     /*!
@@ -138,38 +138,38 @@ public:
     }
 
     /*!
-     * @brief This function sets a value in member ButAmI
-     * @param _ButAmI New value for member ButAmI
+     * @brief This function sets a value in member id
+     * @param _id New value for member id
      */
-    eProsima_user_DllExport void ButAmI(
-            bool _ButAmI)
+    eProsima_user_DllExport void id(
+            int32_t _id)
     {
-        m_ButAmI = _ButAmI;
+        m_id = _id;
     }
 
     /*!
-     * @brief This function returns the value of member ButAmI
-     * @return Value of member ButAmI
+     * @brief This function returns the value of member id
+     * @return Value of member id
      */
-    eProsima_user_DllExport bool ButAmI() const
+    eProsima_user_DllExport int32_t id() const
     {
-        return m_ButAmI;
+        return m_id;
     }
 
     /*!
-     * @brief This function returns a reference to member ButAmI
-     * @return Reference to member ButAmI
+     * @brief This function returns a reference to member id
+     * @return Reference to member id
      */
-    eProsima_user_DllExport bool& ButAmI()
+    eProsima_user_DllExport int32_t& id()
     {
-        return m_ButAmI;
+        return m_id;
     }
 
 
 
 private:
 
-    bool m_ButAmI{false};
+    int32_t m_id{0};
 
 };
 
