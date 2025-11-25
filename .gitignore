@@ -375,3 +375,4 @@ Build/
 /csharp/IDL/generated
 /csharp/IDL/include
 /csharp/IDL/Fast-DDS-Gen
+/cpp/msvc/Solution/IDL/idls

@@ -1,19 +1,72 @@
-// Solution.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+
+// Include DDSBus Fast DDS headers
+#include <ddsbus/fastdds/Participant.hpp>
+#include <ddsbus/fastdds/Publisher.hpp>
+#include <ddsbus/fastdds/Topic.hpp>
+#include <ddsbus/fastdds/DataWriter.hpp>
+
+// Include PubType header of your generated type
+#include <idls/AwesomePubSubTypes.hpp>
+
+// Create your own DataWriterListener by inheriting from ddsbus::core::DataWriterListener
+class MyExampleListener : public ddsbus::core::DataWriterListener
+{
+public:
+    MyExampleListener() = default;
+private:
+    void on_publication_matched(const eprosima::fastdds::dds::PublicationMatchedStatus &status) override
+    {
+        std::cout << "[Publisher] Match status changed: "
+        << status.current_count << " subscriber(s) connected. "
+        << status.total_count << " total connection(s)\n";
+    }
+    void on_offered_incompatible_qos(const eprosima::fastdds::dds::OfferedIncompatibleQosStatus &status) override
+    {
+        std::cout << "[Publisher] Incompatible QoS offered. Total count: "
+        << status.total_count << ", last violated policy ID: " << status.last_policy_id << '\n';
+    }
+};
+
 int main()
 {
-    std::cout << "Hello World!\n";
+    // Perform DDS Setup
+    ddsbus::fastdds::Participant participant(0);
+    ddsbus::fastdds::Publisher publisher = participant.create_publisher();
+    ddsbus::fastdds::Topic<AwesomePubSubType> topic = participant.create_topic<AwesomePubSubType>("ExampleTopicName");
+
+    MyExampleListener listener;
+
+    eprosima::fastdds::dds::DataWriterQos dataWriterQos = publisher.get_default_datawriter_qos();
+    dataWriterQos.reliability().kind = eprosima::fastdds::dds::RELIABLE_RELIABILITY_QOS;
+    dataWriterQos.history().kind = eprosima::fastdds::dds::KEEP_LAST_HISTORY_QOS;
+    dataWriterQos.history().depth = 5;
+    dataWriterQos.durability().kind = eprosima::fastdds::dds::TRANSIENT_LOCAL_DURABILITY_QOS;
+    dataWriterQos.resource_limits().allocated_samples = 5;
+
+    ddsbus::fastdds::DataWriter<AwesomePubSubType> dataWriter = publisher.create_datawriter(topic, &listener, dataWriterQos);
+
+
+    // Construct data sample
+    Awesome sample;
+
+    // Publish data sample
+    int num_samples = 10;
+    using namespace std::chrono_literals;
+    for (int i = 0; i < num_samples; i++)
+    {
+        std::cout << "Press any key to send a sample... \n";
+        std::cin.ignore();
+        std::this_thread::sleep_for(100ms);
+
+        sample.id(i);
+        dataWriter.publish(sample);
+    }
+
+    // Block to keep the publisher alive
+    std::cout << "Press any key to stop the publisher..." << std::endl;
+    std::cin.ignore();
+
+    return 0;
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

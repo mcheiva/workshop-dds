@@ -21,8 +21,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="..\config\EIVAQos.xml" />
+    <None Include="..\config\EIVAQos.xml" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
 struct Awesome 
 {
-    boolean ButAmI;
+    int32 id;
 };
 
