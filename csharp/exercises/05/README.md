@@ -19,10 +19,10 @@ As shown in the DataReader and DataWriter discovery callbacks, you have access t
 // Create your own DomainParticipantListener by inheriting from FastDDS.DomainParticipantListener
 class ExampleDiscoveryListener : FastDDS.DomainParticipantListener
 {
-    public override void on_participant_discovery(DomainParticipant participant,
-        ParticipantDiscoveryStatus reason,
-        ParticipantBuiltinTopicData info,
-        SWIGTYPE_p_bool should_be_ignored)
+    public override void on_participant_discovery(FastDDS.DomainParticipant participant,
+        FastDDS.ParticipantDiscoveryStatus reason,
+        FastDDS.ParticipantBuiltinTopicData info,
+        FastDDS.SWIGTYPE_p_bool should_be_ignored)
     {
         Console.WriteLine($"Participant discovery event! " +
                           $" Reason: { reason }" +
@@ -30,10 +30,10 @@ class ExampleDiscoveryListener : FastDDS.DomainParticipantListener
                           $" Participant Name: {info.participant_name.to_string()}");
     }
 
-    public override void on_data_reader_discovery(DomainParticipant participant,
-        ReaderDiscoveryStatus reason,
-        SubscriptionBuiltinTopicData info,
-        SWIGTYPE_p_bool should_be_ignored)
+    public override void on_data_reader_discovery(FastDDS.DomainParticipant participant,
+        FastDDS.ReaderDiscoveryStatus reason,
+        FastDDS.SubscriptionBuiltinTopicData info,
+        FastDDS.SWIGTYPE_p_bool should_be_ignored)
     {
         Console.WriteLine($"DataReader discovery event! " +
                           $" Reason: {reason}" +
@@ -42,10 +42,10 @@ class ExampleDiscoveryListener : FastDDS.DomainParticipantListener
                           $" GUID: {info.guid}");
     }
 
-    public override void on_data_writer_discovery(DomainParticipant participant,
-        WriterDiscoveryStatus reason,
-        PublicationBuiltinTopicData info,
-        SWIGTYPE_p_bool should_be_ignored)
+    public override void on_data_writer_discovery(FastDDS.DomainParticipant participant,
+        FastDDS.WriterDiscoveryStatus reason,
+        FastDDS.PublicationBuiltinTopicData info,
+        FastDDS.SWIGTYPE_p_bool should_be_ignored)
     {
         Console.WriteLine($"DataWriter discovery event! " +
                           $" Reason: {reason}" +
@@ -64,7 +64,7 @@ In this case the Participant uses the default profile on a specific domain. If y
 FastDDS.DomainParticipantQos domainParticipantQos = Participant.GetDefaultParticipantQos();
 
 ExampleDiscoveryListener listener = new ExampleDiscoveryListener();
-Participant domainParticipant = new Participant(0, domainParticipantQos, listener, StatusMask.none());
+Participant domainParticipant = new Participant(<DomainID>, domainParticipantQos, listener, FastDDS.StatusMask.none());
 ```
 
 Simply block the console so the process can continue listening.
