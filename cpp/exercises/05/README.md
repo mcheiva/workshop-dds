@@ -1,0 +1,1 @@
+# Exercise 5: Discover entitites on the domain
