@@ -9,9 +9,11 @@
         </participant>
 
         <data_writer profile_name="eiva_datawriter_profile" is_default_profile="true">
+	        <!-- YOUR QOS GOES HERE! -->
         </data_writer>
 
         <data_reader profile_name="eiva_datareader_profile" is_default_profile="true">
+	        <!-- YOUR QOS GOES HERE! -->
         </data_reader>
 		
     </profiles>
