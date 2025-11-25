@@ -1,11 +1,6 @@
-# Exercise 5: Discover entitites on the domain
-
-```cpp
 // Include DDSBus Fast DDS headers
 #include <ddsbus/fastdds/Participant.hpp>
-```
 
-```cpp
 // Create your own DomainParticipantListener by inheriting from eprosima::fastdds::dds::DomainParticipantListener
 class ExampleDiscoveryListener : public eprosima::fastdds::dds::DomainParticipantListener
 {
@@ -46,17 +41,17 @@ class ExampleDiscoveryListener : public eprosima::fastdds::dds::DomainParticipan
         std::cout << "  GUID: " << info.guid << '\n';
     }
 };
-```
 
-```cpp
-// Perform DDS Setup
-eprosima::fastdds::dds::DomainParticipantQos domainParticipantQos = ddsbus::fastdds::Participant::get_default_participant_qos();
-ExampleDiscoveryListener discoveryListener;
-ddsbus::fastdds::Participant participant(0, domainParticipantQos, &discoveryListener, eprosima::fastdds::dds::StatusMask::none());
-```
+int main(int argc, char **argv)
+{
+    // Perform DDS Setup
+    eprosima::fastdds::dds::DomainParticipantQos domainParticipantQos = ddsbus::fastdds::Participant::get_default_participant_qos();
+    ExampleDiscoveryListener discoveryListener;
+    ddsbus::fastdds::Participant participant(0, domainParticipantQos, &discoveryListener, eprosima::fastdds::dds::StatusMask::none());
 
-```cpp
-std::cout << "DomainParticipant created. Listening for discovery events...\n";
-// Keep the application running to listen for discovery events
-std::cin.ignore();
-```
+    std::cout << "DomainParticipant created. Listening for discovery events...\n";
+    // Keep the application running to listen for discovery events
+    std::cin.ignore();
+
+    return 0;
+}
