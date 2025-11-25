@@ -1,20 +1,28 @@
-# Exercise 4: Learn about Quality of Service!
+# Exercise 4: Quality of Service (QoS)
 
-## 1. Publisher: In-code Quality of Service
-We get the default dataWriterQos settings and modify the defaults to suit our desired setup.
+This exercise focuses on understanding and applying DataWriter and DataReader QoS policies in Fast DDS to control durability, reliability, history depth, and resource limits (and more).
 
-The default DataWriterQos provided by eProsima already configure the writer to be:
-1) Durability TRANSIENT_LOCAL,
-2) History set to KEEP_LAST with a depth of 1
-3) Reliability set to Reliable
+## Objectives
+1. Configure a publisher with explicit QoS policies (history depth, durability, reliability, resource limits).
+2. Configure a subscriber to request historical samples and reliable delivery.
+3. Observe sample reception behavior when joining late.
+4. Explore incompatible QoS configurations.
 
-in other words a default datawriter will store the latest sample by default and make it available to any subscriber that requests it. Below we will modify and set the qos settings explicitly to what we desire, in this case we wish to:
+## 1. Publisher QoS Configuration
+Start from the default `DataWriterQos` and override the fields needed for this scenario.
 
-1) Increase the amount of samples saved, i.e. Depth to 5
-2) Reduce the pre-allocated samples down to 5 to reduce memory footprint since we will never store more, given that we do not use keys and therefore ALL published samples will relate to the same sample instance
+Default DataWriter configuration (Fast DDS typical defaults):
+1. Durability: `TRANSIENT_LOCAL`
+2. History: `KEEP_LAST` depth = 1
+3. Reliability: `RELIABLE`
 
-remember to give the quality of service settings to the datawriter, otherwise the api will automatically use the defaults.
+Effect: The writer retains the latest sample and makes it available to late-joining readers requesting transient local durability.
 
+For this exercise, adjust the configuration to:
+1. Increase history depth to 5 (retain last 5 samples).
+2. Set `allocated_samples` to 5 to align memory usage with maximum stored samples.
+
+OBS: For clarity we explicitly set things such as Durability and Reliability even though they are already defaulted to same values
 ```cpp
 eprosima::fastdds::dds::DataWriterQos dataWriterQos = publisher.get_default_datawriter_qos();
 dataWriterQos.reliability().kind = eprosima::fastdds::dds::RELIABLE_RELIABILITY_QOS;
@@ -26,46 +34,46 @@ dataWriterQos.resource_limits().allocated_samples = 5;
 ddsbus::fastdds::DataWriter<AwesomePubSubType> dataWriter = publisher.create_datawriter(topic, &listener, dataWriterQos);
 ```
 
-Alter the publish flow to allow yourself to publish more than one sample, either by accepting user input or implementating something like 
+### Publishing Multiple Samples
+Modify the publishing loop to send multiple samples. You can either:
+- Wait for user input between samples, or
+- Sleep between publishes (e.g. `std::this_thread::sleep_for(500ms);`).
+
+Include the headers and literals as needed:
 ```cpp
-std::this_thread::sleep_for(100ms);
+#include <chrono>
+using namespace std::chrono_literals;
 ```
-remember to ```#include <chrono> ``` and for ease of use do ```using namespace std::chrono_literals;  ```
 
-below is an example that simply modifies the orignal flow to send ``` num_samples``` amount of samples waiting for user input between each sample 
+Example loop:
 ```cpp
-// Construct data sample
 Awesome sample;
+int num_samples = 100;
 
-// Publish data sample
-int num_samples = 10;
-
-for (int i = 0; i < num_samples; i++)
+for (int i = 0; i < num_samples; ++i)
 {
-    std::cout << "Press any key to send a sample... \n";
+    std::cout << "Press Enter to send sample " << i << "...\n";
     std::cin.ignore();
-
     sample.id(i);
     dataWriter.publish(sample);
 }
 ```
 
-Start the publisher can publish a few samples before moving up
-## 2. Subscriber: In-code Quality of Service
-Making the change on the subscriber side is a lot easier, we simply change the qos and parse it to the subscriber, and that is it!
+Run the publisher and send several samples before starting the subscriber.
 
-The default DataReaderQos provided by eProsima already configure the reader to be:
-1) Durability VOLATILE,
-3) Reliability set to BEST_EFFORT
+## 2. Subscriber QoS Configuration
+Configure the subscriber to request previously published samples and ensure reliable delivery.
 
-in other words a default datareader will not request the latest published sample by default. Moreover, it will spawn in BEST_EFFORT state meaning that it will not re-request lost samples. Below we will modify and set the qos settings explicitly to what we desire, in this case we wish to:
+Default DataReader configuration (typical):
+1. Durability: `VOLATILE`
+2. Reliability: `BEST_EFFORT`
 
-1) Increase the amount of samples requested, History set to KEEP_LAST with a Depth set to 5
-2) Change Durability to TRANSIENT_LOCAL to actually request past samples 
-3) Change transport to Reliable communication
-4) Reduce memory footprint similarily to the DataWriter
+Effect: A default reader does not retrieve historical transient samples and may drop samples under load (best-effort). For this exercise, adjust:
+1. History: `KEEP_LAST` depth = 5 (match publisher depth).
+2. Durability: `TRANSIENT_LOCAL` (retrieve retained samples on join).
+3. Reliability: `RELIABLE` (ensure retransmission of lost samples).
+4. Resource limits: `allocated_samples = 5` (align memory use).
 
-remember to give the quality of service settings to the datareader, otherwise the api will automatically use the defaults.
 ```cpp
 eprosima::fastdds::dds::DataReaderQos dataReaderQos = subscriber.get_default_datareader_qos();
 dataReaderQos.reliability().kind = eprosima::fastdds::dds::RELIABLE_RELIABILITY_QOS;
@@ -76,4 +84,46 @@ dataReaderQos.resource_limits().allocated_samples = 5;
 
 ddsbus::fastdds::WaitsetDataReader<AwesomePubSubType> dataReader = subscriber.create_waitset_datareader(topic, &listener, dataReaderQos);
 ```
+
+### Late Join Behavior Verification
+Start the subscriber after the publisher has already sent several samples. Verify:
+1. Previously published samples (up to depth) are delivered immediately.
+2. Sample order is preserved.
+3. New samples continue to arrive reliably.
+
+You could spawn multiple subscribers to see that data is effectively distributed to all applications.
+
+## 3. Incompatible / Mismatched QoS Exploration
+This section lets you reason about and experiment with QoS mismatches. Read each question, make the suggested change(s), observe behavior, then expand the answer. Try NOT to open the answer until after you test.
+
+### 3.1 How to Run Experiments
+1. Start from the working configuration in Sections 1–2.
+2. Change only the QoS parameters mentioned in a question.
+3. Restart only the affected participant(s) (writer or reader) if possible to isolate late-join behavior.
+4. Use a late-joining subscriber where durability or history effects are involved.
+
+### 3.2 Questions (Attempt First)
+
+Q1 - History Mismatch: What happens in the case where the DataReader requests more samples than the DataWriter stores? Will this even be a valid configuration?
+
+Modify: Set reader `history().depth = 10` while writer stays at `5`.
+
+<details> <summary>Answer</summary>
+The endpoints match. Only the last 5 samples are delivered because the writer only retained 5. Additional requested depth does not produce more data; the reader's depth is an upper bound, not a demand contract.
+</details>
+
+Q2 - Reliability Mismatch: What happens if the DataReader is configured to use `TRANSIENT_LOCAL` but the DataWriter is `VOLATILE`. In other words, the DataReader is requesting past samples on late-join but the DataWriter is not storing any.
+
+Modify the durability of the DataWriter and rerun the test setup.
+```cpp
+dataWriterQos.durability().kind = eprosima::fastdds::dds::VOLATILE_DURABILITY_QOS;
+```
+asd
+<details> <summary>Answer</summary>
+The endpoints do not match. It is not compatible for the DataReader to request samples when the DataWriter is unable to provide them. You should see that the Listener callback for both `RequestedIncompatibleQos` and `OfferedIncompatibleQos` on both DataReader and DataWriter has been called indicating exactly what QoS policy was violated. You can either step into the `QosPolicyId_t` to see what the code corresponds to or look it up on [QosPolicyId_t](https://fast-dds.docs.eprosima.com/en/latest/fastdds/api_reference/dds_pim/core/policy/qospolicyid_t.html)
+</details>
+
+
+
+
 
