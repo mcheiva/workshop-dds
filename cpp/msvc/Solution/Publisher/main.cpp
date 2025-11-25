@@ -38,11 +38,6 @@ int main()
     MyExampleListener listener;
 
     eprosima::fastdds::dds::DataWriterQos dataWriterQos = publisher.get_default_datawriter_qos();
-    dataWriterQos.reliability().kind = eprosima::fastdds::dds::RELIABLE_RELIABILITY_QOS;
-    dataWriterQos.history().kind = eprosima::fastdds::dds::KEEP_LAST_HISTORY_QOS;
-    dataWriterQos.history().depth = 5;
-    dataWriterQos.durability().kind = eprosima::fastdds::dds::TRANSIENT_LOCAL_DURABILITY_QOS;
-    dataWriterQos.resource_limits().allocated_samples = 5;
 
     ddsbus::fastdds::DataWriter<AwesomePubSubType> dataWriter = publisher.create_datawriter(topic, &listener, dataWriterQos);
 
@@ -56,8 +51,7 @@ int main()
     for (int i = 0; i < num_samples; i++)
     {
         std::cout << "Press any key to send a sample... \n";
-        std::cin.ignore();
-        std::this_thread::sleep_for(100ms);
+        std::this_thread::sleep_for(250ms);
 
         sample.id(i);
         dataWriter.publish(sample);
