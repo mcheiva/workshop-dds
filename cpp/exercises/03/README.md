@@ -1,6 +1,6 @@
 # Exercise 3: Make Your Own Subscriber
 In this exercise we create a simple Subscriber with a DataReader that connects and listens on a single topic based on the initial IDL provided in the `idls` folder.
-Open the Subscriber project under `Solution/Subscribers` and include the headers required for the API. These headers pull in the native Fast DDS components, reduce boilerplate, and manage internal DDS entity lifecycles just like the Publisher example.
+Open the Subscriber project under `Solution/Subscriber` and include the headers required for the API. These headers pull in the native Fast DDS components, reduce boilerplate, and manage internal DDS entity lifecycles just like the Publisher example.
 
 ```cpp
 // Include DDSBus Fast DDS headers

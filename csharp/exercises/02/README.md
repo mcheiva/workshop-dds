@@ -45,12 +45,12 @@ Set up the DDS entities inside `main` — this takes only a few lines. To fully 
 ```csharp
 // ----------- SETUP ----------- //
 
-Participant node = new Participant(<DomainID>);
-Publisher publisher = node.CreatePublisher();
-Topic<Awesome> topic = node.CreateTopic<Awesome>(<SomeTopicName>);
+Participant participant = new Participant(<DomainID>);
+Publisher publisher = participant.CreatePublisher();
+Topic<Awesome> topic = participant.CreateTopic<Awesome>(<SomeTopicName>);
 
 MyExampleListener listener = new MyExampleListener();
-IDataWriter<Awesome> writer = publisher.CreateDataWriter(topic, listener: listener);
+IDataWriter<Awesome> dataWriter = publisher.CreateDataWriter(topic, listener: listener);
 ```
 
 In production code you might instantiate the DataWriter inside the `MyExampleListener` constructor so logging and lifecycle concerns remain co-located. In that case pass `this` instead of `listener`. For now we use default settings for Participant, Publisher, and DataWriter; later exercises introduce more fine‑tuned QoS.
@@ -70,7 +70,7 @@ For publishing you could implement a loop, custom logic, or simply block the ter
 Console.WriteLine("Press any key to send a sample...");
 Console.ReadKey();
 
-writer.Publish(sample);
+dataWriter.Publish(sample);
 Console.WriteLine($"Published sample with id = { sample.id() }"); 
 ```
 

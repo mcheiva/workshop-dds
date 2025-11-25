@@ -15,13 +15,10 @@ The Domain Participant establishes process-wide DDS behavior (discovery, transpo
 It is important to note that the name of the Participant has no impact on the internal discovery mechnanims in DDS, it is merely to aid in understanding what services are running on the network - for that reason, multiple Participants could easily be spawned with the same name.
 
 Retrieve and modify the defaults, then pass them into the constructor. This is done by utilizing a static helper method.
-```cpp
-eprosima::fastdds::dds::DomainParticipantQos domainParticipantQos =
-    ddsbus::fastdds::Participant::get_default_participant_qos();
-
-domainParticipantQos.name("MyService/"); // Use structured naming: <System>/<Component>/
-
-ddsbus::fastdds::Participant participant(0, domainParticipantQos); // domain 0
+```csharp
+FastDDS.DomainParticipantQos domainParticipantQos = Participant.GetDefaultParticipantQos();
+domainParticipantQos.name("MyService/");
+Participant participant = new Participant(0, domainParticipantQos);
 ```
 Recommendation: Adopt a consistent naming convention (e.g. `Company/Subsystem/Role/`) to simplify filtering in discovery tools.
 
@@ -40,39 +37,35 @@ For this exercise, adjust the configuration to:
 2. Set `allocated_samples` to 5 to align memory usage with maximum stored samples.
 
 OBS: For clarity we explicitly set things such as Durability and Reliability even though they are already defaulted to same values
-```cpp
-eprosima::fastdds::dds::DataWriterQos dataWriterQos = publisher.get_default_datawriter_qos();
-dataWriterQos.reliability().kind = eprosima::fastdds::dds::RELIABLE_RELIABILITY_QOS;
-dataWriterQos.history().kind = eprosima::fastdds::dds::KEEP_LAST_HISTORY_QOS;
+```csharp
+FastDDS.DataWriterQos dataWriterQos = publisher.GetDefaultDataWriterQos();
+dataWriterQos.reliability().kind = FastDDS.ReliabilityQosPolicyKind.RELIABLE_RELIABILITY_QOS;
+dataWriterQos.history().kind = FastDDS.HistoryQosPolicyKind.KEEP_LAST_HISTORY_QOS;
 dataWriterQos.history().depth = 5;
-dataWriterQos.durability().kind = eprosima::fastdds::dds::TRANSIENT_LOCAL_DURABILITY_QOS;
+dataWriterQos.durability().kind = FastDDS.DurabilityQosPolicyKind_t.TRANSIENT_LOCAL_DURABILITY_QOS;
 dataWriterQos.resource_limits().allocated_samples = 5;
 
-ddsbus::fastdds::DataWriter<AwesomePubSubType> dataWriter = publisher.create_datawriter(topic, &listener, dataWriterQos);
+IDataWriter<Awesome> dataWriter = publisher.CreateDataWriter(topic, dataWriterQos, listener);
 ```
 
 ### Publishing Multiple Samples
 Modify the publishing loop to send multiple samples. You can either:
 - Wait for user input between samples, or
-- Sleep between publishes (e.g. `std::this_thread::sleep_for(500ms);`).
-
-Include the headers and literals as needed:
-```cpp
-#include <chrono>
-using namespace std::chrono_literals;
-```
+- Sleep between publishes (e.g. `System.Threading.Thread.Sleep(500);`).
 
 Example loop:
-```cpp
-Awesome sample;
-int num_samples = 100;
+```csharp
+// ----------- Construct Sample ----------- //
+Awesome sample = new Awesome();
 
-for (int i = 0; i < num_samples; ++i)
+// ----------- Publish Sample ----------- //
+int numSamples = 100;
+for (int i = 0; i < numSamples; i++)
 {
-    std::cout << "Press Enter to send sample " << i << "...\n";
-    std::cin.ignore();
+    Console.WriteLine($"Press any key to send sample { i }");
+    Console.ReadKey();
     sample.id(i);
-    dataWriter.publish(sample);
+    dataWriter.Publish(sample);
 }
 ```
 
@@ -91,15 +84,15 @@ Effect: A default reader does not retrieve historical transient samples and may 
 3. Reliability: `RELIABLE` (ensure retransmission of lost samples).
 4. Resource limits: `allocated_samples = 5` (align memory use).
 
-```cpp
-eprosima::fastdds::dds::DataReaderQos dataReaderQos = subscriber.get_default_datareader_qos();
-dataReaderQos.reliability().kind = eprosima::fastdds::dds::RELIABLE_RELIABILITY_QOS;
-dataReaderQos.history().kind = eprosima::fastdds::dds::KEEP_LAST_HISTORY_QOS;
+```csharp
+FastDDS.DataReaderQos dataReaderQos = subscriber.GetDefaultDataReaderQos();
+dataReaderQos.reliability().kind = FastDDS.ReliabilityQosPolicyKind.RELIABLE_RELIABILITY_QOS;
+dataReaderQos.history().kind = FastDDS.HistoryQosPolicyKind.KEEP_LAST_HISTORY_QOS;
 dataReaderQos.history().depth = 5;
-dataReaderQos.durability().kind = eprosima::fastdds::dds::TRANSIENT_LOCAL_DURABILITY_QOS;
+dataReaderQos.durability().kind = FastDDS.DurabilityQosPolicyKind_t.TRANSIENT_LOCAL_DURABILITY_QOS;
 dataReaderQos.resource_limits().allocated_samples = 5;
 
-ddsbus::fastdds::WaitsetDataReader<AwesomePubSubType> dataReader = subscriber.create_waitset_datareader(topic, &listener, dataReaderQos);
+IDataReader dataReader = subscriber.CreateWaitsetDataReader(topic, dataReaderQos, listener);
 ```
 
 ### Late Join Behavior Verification
@@ -132,8 +125,8 @@ The endpoints match. Only the last 5 samples are delivered because the writer on
 Q2 - Reliability Mismatch: What happens if the DataReader is configured to use `TRANSIENT_LOCAL` but the DataWriter is `VOLATILE`. In other words, the DataReader is requesting past samples on late-join but the DataWriter is not storing any.
 
 Modify the durability of the DataWriter and rerun the test setup.
-```cpp
-dataWriterQos.durability().kind = eprosima::fastdds::dds::VOLATILE_DURABILITY_QOS;
+```csharp
+dataWriterQos.durability().kind = FastDDS.DurabilityQosPolicyKind_t.VOLATILE_DURABILITY_QOS;
 ```
 <details> <summary>Answer</summary>
 The endpoints do not match. It is not compatible for the DataReader to request samples when the DataWriter is unable to provide them. You should see that the Listener callback for both `RequestedIncompatibleQos` and `OfferedIncompatibleQos` on both DataReader and DataWriter has been called indicating exactly what QoS policy was violated. You can either step into the `QosPolicyId_t` to see what the code corresponds to or look it up on https://fast-dds.docs.eprosima.com/en/latest/fastdds/api_reference/dds_pim/core/policy/qospolicyid_t.html. In this case you should see that the violated Policy was 2, or Durability.
@@ -196,30 +189,29 @@ These should be inserted inside the `data_writer` and `data_reader` brackets
 
 ### 5.3 Loading Profiles
 In order to use the XML profiles inside our client code we will need to load the XML profiles prior to instantiating our DDS entities, this is easily done through the API by calling (before creating the participant)
-```cpp
-ddsbus::fastdds::Participant::load_xml("EIVAQos.xml");
+```csharp
+Participant.LoadXMLProfile("EIVAQos.xml");
 ```
 This is a static method that ensures that the defined XML profiles are loaded and will throw if the .XML profile is not present in the specified path next to the executable. In the example code, i have ensured that the profile is copied to output directory on-change, so no need to worry :)
 
 ### 5.4 Retrieving QoS From Profiles
 When an XML configuration has been successfully loaded, the default settings are overridden by the specified profiles, we can therefore rely mostly on the same calls we used in the original sections 1-3.For default profiles (uses the profile marked `is_default_profile`):
 
-```cpp
-eprosima::fastdds::dds::DataReaderQos dr_qos = subscriber.get_default_datareader_qos();
+```csharp
+FastDDS.DataReaderQos dataReaderQos = subscriber.GetDefaultDataReaderQos();
 ```
 
 Named profile:
-```cpp
-eprosima::fastdds::dds::DataReaderQos dr_alt = subscriber.get_datareader_qos_from_profile("alternative_reader_profile");
+```csharp
+FastDDS.DataReaderQos dataReaderQos = subscriber.GetDataReaderQosFromProfile("alternative_reader_profile");
 ```
 An invalid profile name triggers an exception; handle or validate names at startup.
 
 ### 5.5 Participant Extended QoS
 When domain ID is encoded in the participant profile use the extended QoS accessor:
-```cpp
-eprosima::fastdds::dds::DomainParticipantExtendedQos ext_qos =
-        ddsbus::fastdds::Participant::get_participant_extended_qos_from_default_profile();
-ddsbus::fastdds::Participant participant(ext_qos); // domain comes from XML
+```csharp
+DomainParticipantExtendedQos domainParticipantExtenedQos = Participant.GetDefaultParticipantExtendedQos();
+Participant parcipant = new Participant(domainParticipantExtenedQos); // domain comes from XML
 ```
 
 Note how we are no longer parsing in the domain id into the participant constructor.
@@ -230,7 +222,7 @@ Note how we are no longer parsing in the domain id into the participant construc
 - Simplify audits and versioning of QoS changes.
 - Reduce code complexity by externalizing policy.
 
-Recall that we defined the profiles inside the xml as default, therefore we just rely on on the e.g: `get_default_datareader_qos` for retrieving the configuration. This means that all of the in-code qos settings can be removed.
+Recall that we defined the profiles inside the xml as default, therefore we just rely on on the e.g: `GetDefaultDataReaderQos` for retrieving the configuration. This means that all of the in-code qos settings can be removed.
 
 Refactor publisher/subscriber code to rely on profile-derived QoS (remove hardcoded writer/reader QoS construction) and rerun previous experiments to confirm identical behavior.
 
