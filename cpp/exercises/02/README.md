@@ -86,3 +86,5 @@ std::cin.ignore();
 ```
 
 In this example a listener was used. You could omit it, but then the DataWriter would have no visibility into system events that are typically important for logging.
+
+Start the publisher and verify that everything compiles. When prompted about the windows firewall click "show more" and ensure all 3 boxes are ticked, then hit okay and login with your secondary eiva account.

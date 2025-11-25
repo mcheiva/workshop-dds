@@ -1,6 +1,6 @@
-# Exercise 3: Make your own Subscriber
-In this exercise we create a very simple Subscriber with a DataReader that connects and listens on a single topic based on the initial IDL provided in the `idls` folder.
-Open the Subscriber project under `Solution/Subscribers` and let's include the headers required for the API. These headers pull in the native Fast DDS components, reduce boilerplate, and manage internal DDS entity lifecycles just like the Publisher example.
+# Exercise 3: Make Your Own Subscriber
+In this exercise we create a simple Subscriber with a DataReader that connects and listens on a single topic based on the initial IDL provided in the `idls` folder.
+Open the Subscriber project under `Solution/Subscribers` and include the headers required for the API. These headers pull in the native Fast DDS components, reduce boilerplate, and manage internal DDS entity lifecycles just like the Publisher example.
 
 ```cpp
 // Include DDSBus Fast DDS headers
@@ -10,14 +10,23 @@ Open the Subscriber project under `Solution/Subscribers` and let's include the h
 #include <ddsbus/fastdds/Topic.hpp>
 ```
 
-Next, include the topic type. This is identical to the Publisher example as we wish to connect to the same topic type.
+Next, include the topic type. This is identical to the Publisher example since we wish to connect to the same topic type.
 
 ```cpp
 // Include PubType header of your generated type
 #include <idls/AwesomePubSubTypes.hpp>
 ```
 
-Next define a listener. Here we create `MyExampleListener` inheriting from the API abstract class `DataReaderListener<TopicType>`. This is where the Subscriber code differs slightly from Publishing code as the main function logic will exist here dealing with what to do with incoming samples. Like the Publisher listener we override the corresponding `on_subscription_matched` and `on_requested_incompatible_qos` callback, but we also implement the `on_data_available` which is called for every data sample that the DataReader receives. This is the reason the class is the templated as it needs to know about the `<TopicType>` it is expected to receive, in this case an instance of our `Awesome` class. Notice how the callback receives an R-value reference to an instance, indicating that client code could (and should) take ownership of the sample if it choose to do so. This is especially useful in cases where you wish to push the incoming data into a queue or pooling thread as it allows you to directly move the sample avoiding a potential expensive copy. Generally client code should avoid spending considerable time inside the listener callbacks and move processing into a thread. You should see the callbacks as time critical functions and any time spent here might block the DataReader from doing important operations in the background. In the case of this example we are not interesting in storing the samples or doing any expensive processing we will simply print an acknowledgedment that the data was received to the console.
+Next define a listener. We create `MyExampleListener` inheriting from the API abstract class `DataReaderListener<TopicType>`. This is where the Subscriber code differs slightly from the Publisher code because the main logic for handling incoming samples lives here.
+
+Key points for the listener implementation:
+- We override `on_subscription_matched` and `on_requested_incompatible_qos` just like the Publisher example.
+- We also implement `on_data_available`, invoked for every received data sample.
+- The class is templated so it knows the concrete `<TopicType>` (here `Awesome`).
+- The callback parameter is an rvalue reference, allowing the caller to take ownership (e.g. move into a queue) without copying.
+- Moving the sample is useful when pushing into a work queue or processing thread to avoid expensive copies.
+- Keep listener callbacks lightweight; heavy processing should be offloaded to another thread to avoid blocking the DataReader.
+- In this example we only acknowledge the received sample (no storage or expensive processing).
 ```cpp
 // Create your own DataReaderListener by inheriting from ddsbus::core::DataReaderListener<TopicType>
 class MyExampleListener : public ddsbus::core::DataReaderListener<Awesome>
@@ -44,7 +53,7 @@ class MyExampleListener : public ddsbus::core::DataReaderListener<Awesome>
     
 };
 ```
-Similarily to the DataWriter, the actual setup of the DDS entities are trivial and closely resembles that of the Publisher. Generally there a two types of DataReaders a special implementation called `WaitsetDataReader` and just a regular `DataReader` (constructed using `create_datareader` instead), the main difference being that the former uses an internal thread to process and call the provided listener callbacks free resources for the DataReader to continue processing new incoming samples. In the "normal" DataReader the callbacks that are called such as `on_data_available` actually blocks the internal DataReader from doing any further processing, this is fine for small topics, but client code should in general favor the use of `WaitsetDataReader` as advised by eProsima.
+Similarly to the DataWriter, the actual setup of the DDS entities is trivial and closely resembles the Publisher. There are two types of DataReaders: a special implementation called `WaitsetDataReader` and a regular `DataReader` (constructed using `create_datareader`). The `WaitsetDataReader` uses an internal thread to process and invoke listener callbacks, freeing resources so the underlying DataReader can continue processing new samples. In the regular DataReader, callbacks such as `on_data_available` run inline and block further processing. This is fine for small topics, but client code should generally favor `WaitsetDataReader` as advised by eProsima.
 ```cpp
 // Perform DDS Setup
 ddsbus::fastdds::Participant participant(<domain_id>);
@@ -54,7 +63,7 @@ ddsbus::fastdds::Topic<AwesomePubSubType> topic = participant.create_topic<Aweso
 MyExampleListener listener;
 ddsbus::fastdds::WaitsetDataReader<AwesomePubSubType> dataReader = subscriber.create_waitset_datareader(topic, &listener);
 ```
-Similarily to the Publisher example, in production code you might instantiate the WaitsetDataReader inside the `MyExampleListener` constructor so logging and lifecycle concerns remain co-located. This also. In that case pass `this` instead of `&listener`. For reference (not explicitly used in the exercises to follow) such an example might look like
+Similarly to the Publisher example, in production code you might instantiate the `WaitsetDataReader` inside the `MyExampleListener` constructor so logging and lifecycle concerns remain co‑located. In that case pass `this` instead of `&listener`. For reference (not explicitly used in the exercises to follow) such an example might look like:
 ```cpp
 class MyExampleCombined : public ddsbus::core::DataReaderListener<Awesome>
 {
@@ -75,19 +84,21 @@ class MyExampleCombined : public ddsbus::core::DataReaderListener<Awesome>
 };
 ```
 
-Client code after setting up the DDS entites are very trivial for the DataReader usecase as we merely need to tell the DataReader to start processing the callbacks, in the case of `WaitsetDataReader` it starts an internal processing thread to allow maximum performance on the internal reader.
+Client code after setting up the DDS entities is simple for the DataReader use case: tell the DataReader to start processing callbacks. In the case of `WaitsetDataReader` this starts an internal processing thread for maximum performance.
 
 ```cpp
 // Start executing listener callbacks
 dataReader.start();
 ```
 
+Similarly to the Publisher we keep the application alive until user input tells us to stop. This can be done in many ways; here we simply block the terminal.
 ```cpp
 // Block to keep the subscriber alive
 std::cout << "Press any key to stop the subscriber..." << std::endl;
 std::cin.ignore();
 ```
 
+After the user prompts exit, stop the internal thread to allow DDS to exit gracefully.
 ```cpp
 // Stop dataReader internals
 dataReader.stop();
