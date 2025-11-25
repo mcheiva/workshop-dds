@@ -128,6 +128,15 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <EivaQosXml Include="$(SolutionDir)\Config\EIVAQos.xml"/>
+  </ItemGroup>
+  <Target Name="CopyEivaQos" AfterTargets="Build">
+    <!-- Copy to solution folder -->
+    <Copy SourceFiles="@(EivaQosXml)" DestinationFiles="$(ProjDir)EIVAQos.xml" SkipUnchangedFiles="false" />
+    <!-- Copy to output folder (OutDir == bin/obj output folder) -->
+    <Copy SourceFiles="@(EivaQosXml)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+  </Target>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\fastdds.3.3.0\build\fastdds.targets" Condition="Exists('..\packages\fastdds.3.3.0\build\fastdds.targets')" />

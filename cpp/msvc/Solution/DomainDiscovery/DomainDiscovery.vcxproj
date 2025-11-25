@@ -126,6 +126,15 @@
     <ClCompile Include="DomainDiscovery.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <EivaQosXml Include="$(SolutionDir)\Config\EIVAQos.xml" />
+  </ItemGroup>
+  <Target Name="CopyEivaQos" AfterTargets="Build">
+    <!-- Copy to solution folder -->
+    <Copy SourceFiles="@(EivaQosXml)" DestinationFiles="$(ProjDir)EIVAQos.xml" SkipUnchangedFiles="false" />
+    <!-- Copy to output folder (OutDir == bin/obj output folder) -->
+    <Copy SourceFiles="@(EivaQosXml)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+  </Target>
+  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DomainDiscovery", "DomainDi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DiscoveryServer", "DiscoveryServer\DiscoveryServer.vcxproj", "{835D92D8-BF4F-4A6D-B4BF-02E955C2EE5E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Config", "Config\Config.vcxitems", "{3EF1E95C-6E89-42EB-9A70-B776E4FDD7A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

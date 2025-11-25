@@ -56,8 +56,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Label="Shared">
-  </ImportGroup>
+  <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -129,16 +128,21 @@
   <ItemGroup>
     <ProjectReference Include="..\IDL\IDL.vcxproj">
       <Project>{607cbb70-d27f-4646-846f-8bbc848c7b4f}</Project>
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\config\EIVAQos.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <EivaQosXml Include="$(SolutionDir)\Config\EIVAQos.xml" />
   </ItemGroup>
+  <Target Name="CopyEivaQos" AfterTargets="Build">
+    <!-- Copy to solution folder -->
+    <Copy SourceFiles="@(EivaQosXml)" DestinationFiles="$(ProjDir)EIVAQos.xml" SkipUnchangedFiles="false" />
+    <!-- Copy to output folder (OutDir == bin/obj output folder) -->
+    <Copy SourceFiles="@(EivaQosXml)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+  </Target>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\fastdds.3.3.0\build\fastdds.targets" Condition="Exists('..\packages\fastdds.3.3.0\build\fastdds.targets')" />
