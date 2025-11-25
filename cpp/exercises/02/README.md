@@ -23,7 +23,7 @@ private:
     void on_publication_matched(const eprosima::fastdds::dds::PublicationMatchedStatus &status) override
     {
         std::cout << "[Publisher] Match status changed: "
-        << status.current_count << " subscriber(s) connected.\n"
+        << status.current_count << " subscriber(s) connected. "
         << status.total_count << " total connection(s)\n";
     }
     void on_offered_incompatible_qos(const eprosima::fastdds::dds::OfferedIncompatibleQosStatus &status) override

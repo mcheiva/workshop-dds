@@ -34,6 +34,7 @@ for (auto locator_it = domainParticipantExtendedQos.wire_protocol().builtin.meta
     }
 }
 
+std::cout << '\n';
 std::cout << "press any key to stop the server..." << std::endl;
 std::cin.ignore();
 ```
