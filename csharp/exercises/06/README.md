@@ -61,50 +61,38 @@ Copy the profiles below into your `EIVAQos.xml`
 ```
 
 As in previous exercises, we set up a Participant with no additional entities attached.
-```cpp
-// Include DDSBus Fast DDS headers
-#include <ddsbus/fastdds/Participant.hpp>
+```csharp
+using Eiva.DDSBus;
 ```
 
 Setting up the DDS entities is trivial. Ensure you fetch the correct profile for the server (and for the client).
 
-```cpp
-// Load QoS profiles from XML file
-ddsbus::fastdds::Participant::load_xml("EIVAQos.xml");
+```csharp
+// ----------- SETUP ----------- //
 
-// Retrieve DomainParticipantQos from discovery server profile
-eprosima::fastdds::dds::DomainParticipantExtendedQos domainParticipantExtendedQos =
-    ddsbus::fastdds::Participant::get_participant_extended_qos_from_profile("eiva_discoveryserver_profile");
-ddsbus::fastdds::Participant participant(domainParticipantExtendedQos, nullptr, eprosima::fastdds::dds::StatusMask::none());
+Participant.LoadXMLProfile("EIVAQos.xml");
+
+FastDDS.DomainParticipantExtendedQos domainParticipantExtendedQos = Participant.GetParticipantExtendedQosFromProfile("eiva_discoveryserver_profile");
+Participant participant = new Participant(domainParticipantExtendedQos, null, FastDDS.StatusMask.none());
 ```
 You might ask: why create a separate service that contains only the `SERVER` participant? Could the Publisher or Subscriber act as the `SERVER`? Technically yes, but in time‑critical systems you should avoid burdening services with forwarding discovery. If the discovery server crashes, restarting discovery is simpler with a small microservice than risking a critical (e.g., sensor) process. Additionally, you can run multiple Discovery Server services for redundancy.
 
 The following code prints basic information about the `SERVER` (e.g., address; here `localhost`) and keeps the application alive until the user chooses to stop it.
-```cpp
-std::cout << "### EIVA Discovery Server is running ###" << std::endl;
-std::cout << "  Participant Type:   " << domainParticipantExtendedQos.wire_protocol().builtin.discovery_config.discoveryProtocol << std::endl;
-std::cout << "  Server GUID prefix: " << participant.get_native()->guid().guidPrefix << std::endl;
-std::cout << "  Server Addresses:   ";
-for (auto locator_it = domainParticipantExtendedQos.wire_protocol().builtin.metatrafficUnicastLocatorList.begin();
-     locator_it != domainParticipantExtendedQos.wire_protocol().builtin.metatrafficUnicastLocatorList.end();)
-{
-    std::cout << *locator_it;
-    if (++locator_it != domainParticipantExtendedQos.wire_protocol().builtin.metatrafficUnicastLocatorList.end())
-    {
-        std::cout << std::endl << "                      ";
-    }
-}
+```csharp
+// ----------- Keep alive ----------- //
+Console.WriteLine("### EIVA Discovery Server is running ###");
+Console.WriteLine($"  Participant Type:   {domainParticipantExtendedQos.wire_protocol().builtin.discovery_config.discoveryProtocol}");
+Console.WriteLine($"  Server GUID prefix: {participant.GetNative().guid().guidPrefix}");
 
-std::cout << '\n';
-std::cout << "press any key to stop the server..." << std::endl;
-std::cin.ignore();
+Console.WriteLine("Press any key to close discovery server....");
+Console.ReadKey();
 ```
 
 If you completed the XML profile setup in previous exercises, fetch the default QoS profile for the Publisher and Subscriber and the applications will automatically use the `CLIENT` configuration.
 
-```cpp
-eprosima::fastdds::dds::DomainParticipantExtendedQos qos = ddsbus::fastdds::Participant::get_participant_extended_qos_from_default_profile();
-ddsbus::fastdds::Participant participant(qos);
+```csharp
+DomainParticipantExtendedQos domainParticipantExtendedQos = Participant.GetDefaultParticipantExtendedQos();
+Participant participant = new Participant(domainParticipantExtendedQos);
 ```
 
 - Try starting both Publisher and Subscriber before launching the discovery server. No matching occurs because they cannot find each other. Start the discovery server and observe that the services connect.
