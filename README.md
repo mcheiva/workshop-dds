@@ -16,7 +16,7 @@ Welcome to the EIVA DDS Workshop. This repository contains hands‑on exercises 
 - Fast DDS and fastddsgen available via the provided build scripts/profiles.
 
 ## Choose Your Track
-Pick your preferred language to complete the exercises, there is a right choice, a wrong one - so choose wisely!
+Pick your preferred language to complete the exercises, there is a right choice, and a wrong one - so choose wisely!
 
 - [C++ Exercises](cpp/README.md)
 - [C# Exercises](csharp/README.md)
