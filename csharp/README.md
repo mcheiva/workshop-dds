@@ -2,8 +2,8 @@
 
 
 Brief overview:
-- Build Publisher/Subscriber using Fast DDS .NET bindings.
-- Use generated IDL types from the shared `IDL`.
+- Build Publisher/Subscriber using Fast DDS .NET bindings generated through SWIG
+- Use locally generated IDL types from the shared `IDL` directory.
 - Configure QoS via XML profiles or in code.
 
 Prerequisites:
