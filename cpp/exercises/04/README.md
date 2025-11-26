@@ -144,26 +144,28 @@ The endpoints do not match. It is not compatible for the DataReader to request s
 XML profiles allow declarative QoS configuration, reducing in‑code duplication and enabling environment-specific tuning without recompilation.
 
 ### 5.1 Base Example
-In both Publisher and Subscriber projects an `EIVAQos.xml` similar to the one below is present:
+In both Publisher and Subscriber projects an `EIVAQos.xml` similar to the one below is present under `Config` :
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <dds xmlns="http://www.eprosima.com">
-    <profiles>
-        <participant profile_name="eiva_participant_profile" is_default_profile="true">
-            <domainId>69</domainId>
-            <rtps>
-                <name>EIVA/</name>
-            </rtps>
-        </participant>
+	<profiles>
+		<participant profile_name="eiva_participant_profile" is_default_profile="true">
+			<!-- Set your domain ID here -->
+			<domainId>69</domainId>
+			<!-- Set your Participant name here -->
+			<rtps>
+				<name>EIVA/</name>
+			</rtps>
+		</participant>
 
-        <data_writer profile_name="eiva_datawriter_profile" is_default_profile="true">
-            <!-- YOUR QOS GOES HERE! -->
-        </data_writer>
+		<data_writer profile_name="eiva_datawriter_profile" is_default_profile="true">
+			<!-- YOUR QOS GOES HERE! -->
+		</data_writer>
 
-        <data_reader profile_name="eiva_datareader_profile" is_default_profile="true">
-            <!-- YOUR QOS GOES HERE! -->
-        </data_reader>
-    </profiles>
+		<data_reader profile_name="eiva_datareader_profile" is_default_profile="true">
+			<!-- YOUR QOS GOES HERE! -->
+		</data_reader>
+	</profiles>
 </dds>
 ```
 The example defines separate profiles for the Participant, DataWriter, and DataReader, each marked as the default yet currently empty—meaning they simply fall back to the Fast DDS library defaults. Declaring a profile with `is_default_profile="true"` establishes the baseline QoS retrieved by the standard get_default_*_qos() calls while still allowing additional, named profiles to express alternative behaviors. This means that we could have a multitude of e.g. `data_writer` profiles that are loaded by the client code that are applicable for different performance scenarios. Next, we will replicate the explicit QoS configuration from Sections 1–3 by modifying these profiles with the required policies. 

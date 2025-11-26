@@ -75,12 +75,15 @@ ddsbus::fastdds::Participant::load_xml("EIVAQos.xml");
 // Retrieve DomainParticipantQos from discovery server profile
 eprosima::fastdds::dds::DomainParticipantExtendedQos domainParticipantExtendedQos =
     ddsbus::fastdds::Participant::get_participant_extended_qos_from_profile("eiva_discoveryserver_profile");
+
+// Spawn DomainParticipant with the retrieved QoS
 ddsbus::fastdds::Participant participant(domainParticipantExtendedQos, nullptr, eprosima::fastdds::dds::StatusMask::none());
 ```
 You might ask: why create a separate service that contains only the `SERVER` participant? Could the Publisher or Subscriber act as the `SERVER`? Technically yes, but in time‑critical systems you should avoid burdening services with forwarding discovery. If the discovery server crashes, restarting discovery is simpler with a small microservice than risking a critical (e.g., sensor) process. Additionally, you can run multiple Discovery Server services for redundancy.
 
 The following code prints basic information about the `SERVER` (e.g., address; here `localhost`) and keeps the application alive until the user chooses to stop it.
 ```cpp
+// Keep the application running
 std::cout << "### EIVA Discovery Server is running ###" << std::endl;
 std::cout << "  Participant Type:   " << domainParticipantExtendedQos.wire_protocol().builtin.discovery_config.discoveryProtocol << std::endl;
 std::cout << "  Server GUID prefix: " << participant.get_native()->guid().guidPrefix << std::endl;
