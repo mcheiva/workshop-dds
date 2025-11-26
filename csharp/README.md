@@ -1,9 +1,18 @@
 # You have chosen the C# way! Well... all the power to you!
 
-This repo yatatata
+
+Brief overview:
+- Build Publisher/Subscriber using Fast DDS .NET bindings.
+- Use generated IDL types from the shared `IDL`.
+- Configure QoS via XML profiles or in code.
+
+Prerequisites:
+- Windows, .NET 8 SDK installed.
+- Visual Studio
+
 
 ## Exercises
-
+The exercises are chronological; proceed top‑to‑bottom to follow the flow.
 - [Exercise 1: Getting Started](exercises/01/README.md)
 - [Exercise 2: Make your own Publisher!](exercises/02/README.md)
 - [Exercise 3: Make your own Publisher!](exercises/03/README.md)
