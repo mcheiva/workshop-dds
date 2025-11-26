@@ -18,7 +18,7 @@ Next, include the topic type. It is generally sufficient to load the `<IDL>PubSu
 #include <idls/AwesomePubSubTypes.hpp>
 ```
 
-Next define a listener. Here we create `MyExampleListener` inheriting from the API abstract class `DataWriterListener`. This class holds the logic for internal writer events. For this example we are primarily interested in: (a) successful matches with a DataReader and (b) attempted connections with incompatible QoS; therefore we override `on_publication_matched` and `on_offered_incompatible_qos`. Inspect the available fields in the `status` objects and experiment with overriding additional callbacks if desired.
+Next define a listener. Here we create `MyExampleListener` inheriting from the API abstract class `DataWriterListener`. This class holds the logic for internal writer events. For this example we are primarily interested in: (a) successful matches with a DataReader and (b) attempted connections with incompatible QoS; therefore we override `on_publication_matched` and `on_offered_incompatible_qos`. Inspect the available fields in the `status` objects and experiment with overriding additional callbacks if desired. I recommend studying the [documentation](https://fast-dds.docs.eprosima.com/en/latest/fastdds/dds_layer/publisher/dataWriterListener/dataWriterListener.html#datawriterlistener) for DataWriterListener to understand what the callbacks mean.
 
 ```cpp
 // Create your own DataWriterListener by inheriting from ddsbus::core::DataWriterListener
