@@ -20,13 +20,11 @@ class EIVAWorkshopRecipe(ConanFile):
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
-        "BUILD_DEMOS": [True, False],
     }
 
     default_options = {
         "shared": False,
         "fPIC": True,
-        "BUILD_DEMOS": True,
     }
 
     def configure(self):
@@ -37,7 +35,7 @@ class EIVAWorkshopRecipe(ConanFile):
         # self.options["opencv"].with_webp = False
 
     def requirements(self):
-        self.requires("eiva-ddsbus/0.1.1")
+        self.requires("eiva-ddsbus/0.1.2")
 
     def build_requirements(self):
         self.tool_requires("eiva-fast-dds-gen/4.1.0")
@@ -45,7 +43,6 @@ class EIVAWorkshopRecipe(ConanFile):
 
     def generate(self):
         tc = CMakeToolchain(self)
-        tc.variables["BUILD_DEMOS"] = self.options.BUILD_DEMOS
         tc.generate()
         CMakeDeps(self).generate()
 
@@ -62,6 +59,4 @@ class EIVAWorkshopRecipe(ConanFile):
         cmake.install()
 
     def package_info(self):
-        self.cpp_info.libs = collect_libs(self)
-        self.cpp_info.set_property("cmake_file_name", "ddsbus")
-        self.cpp_info.set_property("cmake_target_name", "ddsbus")
+        pass

@@ -1,59 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <dds xmlns="http://www.eprosima.com">
-    <profiles>
-	    <participant profile_name="eiva_participant_profile" is_default_profile="true">
-		    <rtps>
-			    <name>EIVA/</name>
-			    <builtin>
-				    <discovery_config>
-					    <!-- Set participant as CLIENT -->
-					    <discoveryProtocol>CLIENT</discoveryProtocol>
-					    <!--
-                        Set a list of remote servers (locators) to which this
-                        client connects.
-                    -->
-					    <discoveryServersList>
-						    <!-- Set REMOTE SERVER's listening locator for PDP -->
-						    <locator>
-							    <udpv4>
-								    <address>127.0.0.1</address>
-								    <port>14520</port>
-							    </udpv4>
-						    </locator>
-					    </discoveryServersList>
-					    <!-- Set ping period to 250 ms -->
-					    <clientAnnouncementPeriod>
-						    <nanosec>250000000</nanosec>
-					    </clientAnnouncementPeriod>
-				    </discovery_config>
-			    </builtin>
-		    </rtps>
-	    </participant>
+	<profiles>
+		<participant profile_name="eiva_participant_profile" is_default_profile="true">
+			<!-- Set your domain ID here -->
+			<domainId>69</domainId>
+			<!-- Set your Participant name here -->
+			<rtps>
+				<name>EIVA/</name>
+			</rtps>
+		</participant>
 
-	    <participant profile_name="eiva_discoveryserver_profile">
-		    <rtps>
-			    <name>EIVA/DISCOVERY_SERVER/</name>
-			    <builtin>
-				    <discovery_config>
-					    <discoveryProtocol>SERVER</discoveryProtocol>
-				    </discovery_config>
-				    <metatrafficUnicastLocatorList>
-					    <locator>
-						    <udpv4>
-							    <address>10.10.180.61</address>
-							    <port>14520</port>
-						    </udpv4>
-					    </locator>
-				    </metatrafficUnicastLocatorList>
-			    </builtin>
-		    </rtps>
-	    </participant>
+		<data_writer profile_name="eiva_datawriter_profile" is_default_profile="true">
+			<!-- YOUR QOS GOES HERE! -->
+		</data_writer>
 
-        <data_writer profile_name="eiva_datawriter_profile" is_default_profile="true">
-        </data_writer>
-
-        <data_reader profile_name="eiva_datareader_profile" is_default_profile="true">
-        </data_reader>
-		
-    </profiles>
+		<data_reader profile_name="eiva_datareader_profile" is_default_profile="true">
+			<!-- YOUR QOS GOES HERE! -->
+		</data_reader>
+	</profiles>
 </dds>

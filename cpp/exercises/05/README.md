@@ -69,8 +69,8 @@ ddsbus::fastdds::Participant participant(<domain_id>, domainParticipantQos, &dis
 
 Simply block the console so the process can continue listening.
 ```cpp
-std::cout << "DomainParticipant created. Listening for discovery events...\n";
 // Keep the application running to listen for discovery events
+std::cout << "DomainParticipant created. Listening for discovery events...\n";
 std::cin.ignore();
 ```
 
