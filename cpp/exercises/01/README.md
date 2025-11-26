@@ -1,16 +1,16 @@
 # Exercise 1: Getting Started
 
-In C++ you have two options, either solve the exercise using a CMake project (i would definitely recommend) under the `conan` subfolder or a classic C++ Visual Studio project under the `mscvc` folder.
+In C++ you have two options: either solve the exercise using a CMake‑based project (recommended) under the `conan/` subfolder, or a classic C++ Visual Studio project under the `msvc/` folder.
 
-Commonly for both is that it requires you to have setup conan dependecy manager as it is required for building the local idls reqardless of project type.
+For both options you must have the Conan dependency manager set up; it is required for building local IDLs regardless of project type.
 
-In the following two sections is a description on getting started in either of the two project types, pick your poison.
+The following sections describe getting started with both project types — pick your approach.
 
 ## 1. Conan Project
 
-The `conan` folder contains a `conanfile.py` describing all required dependencies (Fast DDS and helper interfaces). Conan resolves and fetches prebuilt binaries from Artifactory; if a package for your profile is missing, `--build=missing` triggers a local build automatically.
+The `conan/` folder contains a `conanfile.py` describing all required dependencies (Fast DDS and helper interfaces). Conan resolves and fetches prebuilt binaries from Artifactory; if a package for your profile is missing, `--build=missing` triggers a local build automatically.
 
-The following two sections explain briefly how Conan works, you should ideally end up running the `build` version in a terminal with a your desired configuration of your choice. Note - you can install more than once!
+The next two subsections briefly explain how Conan works. You should ideally run the `conan build` command in a terminal with your desired configuration. Note: you can install more than once.
 ## 1.1. Install Dependencies with Conan
 
 Run this from the project root to install dependencies declared in `conanfile.py`:
@@ -29,7 +29,7 @@ Example (Windows, Visual Studio, `RelWithDebInfo`):
 
 Conan can also run the full build (it will perform install first, then invoke CMake). For day‑to‑day workflow, this single command sets up dependencies and compiles targets.
 
-Important: Run the build command below before opening the `conan` folder in Visual Studio so CMake configuration and generated artifacts are present.
+Important: Run the build command below before opening the `conan/` folder in Visual Studio so CMake configuration and generated artifacts are present.
 
 ```bash
   conan build . -pr:a=<desired-conan-profile> --build=missing
@@ -43,32 +43,32 @@ Example (Windows, Visual Studio, `RelWithDebInfo`):
 
 _Voila! Dependencies resolved and the project built in the `build` directory._
 
-## 1.3 Open `conan` Folder in Visual Studio
+## 1.3 Open `conan/` Folder in Visual Studio
 
-Only after successfully running the Conan build, open the `conan` folder in Visual Studio:
-- In Folder: Right Click → Select `Open With Visual Studio`.
-- In VS: Select `Open a local folder` → Navigate to `conan/` folder.
-- VS detects `CMakeLists.txt` and configures CMake automatically.
+Only after successfully running the Conan build, open the `conan/` folder in Visual Studio:
+- In Explorer: Right‑click the folder → `Open With Visual Studio`.
+- Or in Visual Studio: File → Open → Folder… and select `cpp/conan/`.
+- Visual Studio detects `CMakeLists.txt` and configures CMake automatically.
 
 If everything went well, you should see a CMake configuration such as `conan-RelWithDebInfo` in the drop‑down (matching your chosen profile).
 
-Now that everything is setup, you no longer have to run any command line conan commands, and you can now build directly from within Visual Studio! 
+Now that everything is set up, you no longer need to run Conan commands manually; you can build directly from within Visual Studio.
 
-You can now skip to the third section and understand how to do local IDL development
+You can now skip to Section 3 to learn how to do local IDL development.
 
 ## 2. MSVC Project
 
-Inside the msvc folder you will find three key aspects, a `build_idls.bat` file that internally will run fastddsgen to generate C++ from the idl files. a `idls` folder that contains a cmake project used by the `build_idls.bat` to generate the c++ types using fastddsgen. The idls used int the `Solution` project are defined until the `idls` folder.
+Inside the `msvc/` folder you will find three key elements: a `build_idls.bat` file that runs fastddsgen to generate C++ from the IDL files; an `idls/` folder that contains a CMake project used by `build_idls.bat` to generate the C++ types via fastddsgen; and the `Solution/` project that references the generated IDLs. The IDLs used in the `Solution` project are defined within the `idls/` folder.
 
 - `Solution/` — the codebase where you complete the exercises. Open `Solution.sln` and ensure you are connected to VPN (if you are not at HQ) so required NuGet packages can be restored from the self‑hosted feed.
 
-Before continueing it is required that you run the `build_idls.bat` file to compile the C++ model layer required for the exercises.
+Before continuing, you must run `build_idls.bat` to compile the C++ model layer required for the exercises.
 
 ## 3. Local IDL development in C++
 
 The base `Awesome.idl` located in `idls/idls/` should remain unchanged for now. To add your own structures:
 1. Place additional `.idl` files into `idls/idls/`.
-2. Enter the CMakeLists.txt file inside the idls/idls folder and add your IDL to the CMake project for it to be picked up by fastddsgen:
+2. Edit `idls/idls/CMakeLists.txt` and add your IDL to the CMake project so fastddsgen picks it up:
 ```cpp
 set (IDL_FILES
     idls/Awesome.idl
@@ -82,6 +82,6 @@ set(ALL_GENERATED_FILES
 	${GENERATED_TYPE_SUPPORT_DIR}/idls/<SubFolderPath>/<NameOfIdl>TypeObjectSupport.cxx // YOUR OWN IDL
 )
 ```
-It is important to remember to first add your idl to the IDL_FILES definition and add the generated support files for serialization etc to the ALL_GENERATED_FILES, this is to allow to build command to ensure the files are automatically generated by fastddsgen.
+Important: add your IDL to `IDL_FILES` and the generated support files to `ALL_GENERATED_FILES`. This ensures the build triggers fastddsgen to generate the files automatically.
 
-If you are using the conan cmake project, you can just directly hit build from within Visual Studio as fastddsgen is fully integrated with CMake, if you use the classic C++ msvc style project, you have to go back and run the `build_idls.bat` for the updated datastructures to be present.
+If you are using the Conan CMake project, you can build directly from within Visual Studio — fastddsgen is integrated with CMake. If you use the classic C++ MSVC project, run `build_idls.bat` again so updated data structures are generated and present.
