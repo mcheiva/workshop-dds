@@ -13,7 +13,7 @@ Next, include the topic types. This is identical to the Publisher example since 
 using IDL;
 ```
 
-Next define a listener. We create `MyExampleListener` inheriting from the API abstract class `DataReaderListener<TopicType>`. This is where the Subscriber code differs slightly from the Publisher code because the main logic for handling incoming samples lives here.
+Next define a listener. We create `MyExampleListener` inheriting from the API abstract class `DataReaderListener<TopicType>`. This is where the Subscriber code differs slightly from the Publisher code because the main logic for handling incoming samples lives here. I recommend studying the [documentation](https://fast-dds.docs.eprosima.com/en/latest/fastdds/dds_layer/subscriber/dataReaderListener/dataReaderListener.html#datareaderlistener) for DataReaderListener to understand what the callbacks mean.
 
 Key points for the listener implementation:
 - We override `OnSubscriptionMatched` and `OnRequestedIncompatibleQos` just like the Publisher example.
