@@ -12,6 +12,6 @@ if exist "%TARGET_DIR%" (
 )
 
 echo Starting Conan build...
-conan build idl/conanfile.py -pr:a=Visual-Studio-2022-v143-x64-Release --build=missing
+conan build idls/conanfile.py -pr:a=Visual-Studio-2022-v143-x64-Release --build=missing
 
 echo Build finished.
