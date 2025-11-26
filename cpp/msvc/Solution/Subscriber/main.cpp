@@ -7,7 +7,9 @@
 #include <ddsbus/fastdds/Topic.hpp>
 
 // Include PubType header of your generated type
+#include <__msvc_filebuf.hpp>
 #include <idls/AwesomePubSubTypes.hpp>
+
 
 // Create your own DataReaderListener by inheriting from ddsbus::core::DataReaderListener<TopicType>
 class MyExampleListener : public ddsbus::core::DataReaderListener<Awesome>
@@ -37,7 +39,14 @@ class MyExampleListener : public ddsbus::core::DataReaderListener<Awesome>
 int main()
 {
     // Perform DDS Setup
-    ddsbus::fastdds::Participant participant(0);
+    // Load QoS profiles from XML file
+    ddsbus::fastdds::Participant::load_xml("EIVAQos.xml");
+    
+
+    // Retrieve DomainParticipantQos from discovery server profile
+    eprosima::fastdds::dds::DomainParticipantExtendedQos domainParticipantExtendedQos =
+        ddsbus::fastdds::Participant::get_participant_extended_qos_from_profile("eiva_participant_profile");
+    ddsbus::fastdds::Participant participant(domainParticipantExtendedQos);
     ddsbus::fastdds::Subscriber subscriber = participant.create_subscriber();
     ddsbus::fastdds::Topic<AwesomePubSubType> topic = participant.create_topic<AwesomePubSubType>("ExampleTopicName");
 

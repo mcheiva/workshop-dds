@@ -18,8 +18,4 @@
     <PackageReference Include="Eiva.DDSBus" Version="0.1.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\IDL.Net\IDL.Net.csproj" />
-  </ItemGroup>
-
 </Project>
