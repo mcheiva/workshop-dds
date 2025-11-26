@@ -10,7 +10,6 @@ Prerequisites:
 - Windows, .NET 8 SDK installed.
 - Visual Studio
 
-
 ## Exercises
 The exercises are chronological; proceed top‑to‑bottom to follow the flow.
 - [Exercise 1: Getting Started](exercises/01/README.md)
