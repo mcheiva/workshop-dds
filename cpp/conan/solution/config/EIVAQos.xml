@@ -40,7 +40,7 @@
 				    <metatrafficUnicastLocatorList>
 					    <locator>
 						    <udpv4>
-							    <address>localhost</address>
+							    <address>10.10.180.61</address>
 							    <port>14520</port>
 						    </udpv4>
 					    </locator>

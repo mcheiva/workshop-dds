@@ -27,7 +27,7 @@ class MyExampleListener : Eiva.DDSBus.Core.DataWriterListener
             $" {info.total_count} total connection(s)");
     }
 
-    public override void OnOfferedIncompatibleQos(IncompatibleQosStatus status)
+    public override void OnOfferedIncompatibleQos(FastDDS.IncompatibleQosStatus status)
     {
         Console.WriteLine(
             $"[Subscriber] Incompatible QoS requested. Total count: {status.total_count} " +
