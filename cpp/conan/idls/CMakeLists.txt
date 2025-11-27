@@ -12,11 +12,17 @@ set(GENERATED_TYPE_SUPPORT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/)
 
 set (IDL_FILES
     idls/Awesome.idl
+    idls/MoveCommand.idl
+    idls/WeaponCommand.idl
 )
 
 set(ALL_GENERATED_FILES
     ${GENERATED_TYPE_SUPPORT_DIR}/idls/AwesomePubSubTypes.cxx
 	${GENERATED_TYPE_SUPPORT_DIR}/idls/AwesomeTypeObjectSupport.cxx
+    ${GENERATED_TYPE_SUPPORT_DIR}/idls/MoveCommandPubSubTypes.cxx
+    ${GENERATED_TYPE_SUPPORT_DIR}/idls/MoveCommandTypeObjectSupport.cxx
+    ${GENERATED_TYPE_SUPPORT_DIR}/idls/WeaponCommandPubSubTypes.cxx
+	${GENERATED_TYPE_SUPPORT_DIR}/idls/WeaponCommandTypeObjectSupport.cxx
 )
 
 add_custom_command(

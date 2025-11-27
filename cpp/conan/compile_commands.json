@@ -1,0 +1,38 @@
+[
+{
+  "directory": "/home/aho/work/workshop-dds/cpp/conan/build/Release/idls",
+  "command": "/usr/bin/g++  -I/home/aho/work/workshop-dds/cpp/conan/idls -isystem /home/aho/.conan2/p/b/eiva-474c69f3c7975/p/include -isystem /home/aho/.conan2/p/eiva-2f10e724d3828/p/include -m64 -O3 -DNDEBUG -std=c++20 -o CMakeFiles/demo_idl.dir/idls/AwesomePubSubTypes.cxx.o -c /home/aho/work/workshop-dds/cpp/conan/idls/idls/AwesomePubSubTypes.cxx",
+  "file": "/home/aho/work/workshop-dds/cpp/conan/idls/idls/AwesomePubSubTypes.cxx",
+  "output": "idls/CMakeFiles/demo_idl.dir/idls/AwesomePubSubTypes.cxx.o"
+},
+{
+  "directory": "/home/aho/work/workshop-dds/cpp/conan/build/Release/idls",
+  "command": "/usr/bin/g++  -I/home/aho/work/workshop-dds/cpp/conan/idls -isystem /home/aho/.conan2/p/b/eiva-474c69f3c7975/p/include -isystem /home/aho/.conan2/p/eiva-2f10e724d3828/p/include -m64 -O3 -DNDEBUG -std=c++20 -o CMakeFiles/demo_idl.dir/idls/AwesomeTypeObjectSupport.cxx.o -c /home/aho/work/workshop-dds/cpp/conan/idls/idls/AwesomeTypeObjectSupport.cxx",
+  "file": "/home/aho/work/workshop-dds/cpp/conan/idls/idls/AwesomeTypeObjectSupport.cxx",
+  "output": "idls/CMakeFiles/demo_idl.dir/idls/AwesomeTypeObjectSupport.cxx.o"
+},
+{
+  "directory": "/home/aho/work/workshop-dds/cpp/conan/build/Release/solution/Publisher",
+  "command": "/usr/bin/g++  -I/home/aho/work/workshop-dds/cpp/conan/idls -isystem /home/aho/.conan2/p/b/eiva-61e1c60c60899/p/include -isystem /home/aho/.conan2/p/b/eiva-474c69f3c7975/p/include -isystem /home/aho/.conan2/p/eiva-2f10e724d3828/p/include -m64 -O3 -DNDEBUG -std=c++20 -o CMakeFiles/Publisher.dir/main.cpp.o -c /home/aho/work/workshop-dds/cpp/conan/solution/Publisher/main.cpp",
+  "file": "/home/aho/work/workshop-dds/cpp/conan/solution/Publisher/main.cpp",
+  "output": "solution/Publisher/CMakeFiles/Publisher.dir/main.cpp.o"
+},
+{
+  "directory": "/home/aho/work/workshop-dds/cpp/conan/build/Release/solution/Subscriber",
+  "command": "/usr/bin/g++  -I/home/aho/work/workshop-dds/cpp/conan/idls -isystem /home/aho/.conan2/p/b/eiva-61e1c60c60899/p/include -isystem /home/aho/.conan2/p/b/eiva-474c69f3c7975/p/include -isystem /home/aho/.conan2/p/eiva-2f10e724d3828/p/include -m64 -O3 -DNDEBUG -std=c++20 -o CMakeFiles/Subscriber.dir/main.cpp.o -c /home/aho/work/workshop-dds/cpp/conan/solution/Subscriber/main.cpp",
+  "file": "/home/aho/work/workshop-dds/cpp/conan/solution/Subscriber/main.cpp",
+  "output": "solution/Subscriber/CMakeFiles/Subscriber.dir/main.cpp.o"
+},
+{
+  "directory": "/home/aho/work/workshop-dds/cpp/conan/build/Release/solution/DomainDiscovery",
+  "command": "/usr/bin/g++  -isystem /home/aho/.conan2/p/b/eiva-61e1c60c60899/p/include -isystem /home/aho/.conan2/p/b/eiva-474c69f3c7975/p/include -isystem /home/aho/.conan2/p/eiva-2f10e724d3828/p/include -m64 -O3 -DNDEBUG -std=c++20 -o CMakeFiles/DomainDiscovery.dir/main.cpp.o -c /home/aho/work/workshop-dds/cpp/conan/solution/DomainDiscovery/main.cpp",
+  "file": "/home/aho/work/workshop-dds/cpp/conan/solution/DomainDiscovery/main.cpp",
+  "output": "solution/DomainDiscovery/CMakeFiles/DomainDiscovery.dir/main.cpp.o"
+},
+{
+  "directory": "/home/aho/work/workshop-dds/cpp/conan/build/Release/solution/DiscoveryServer",
+  "command": "/usr/bin/g++  -isystem /home/aho/.conan2/p/b/eiva-61e1c60c60899/p/include -isystem /home/aho/.conan2/p/b/eiva-474c69f3c7975/p/include -isystem /home/aho/.conan2/p/eiva-2f10e724d3828/p/include -m64 -O3 -DNDEBUG -std=c++20 -o CMakeFiles/DiscoveryServer.dir/main.cpp.o -c /home/aho/work/workshop-dds/cpp/conan/solution/DiscoveryServer/main.cpp",
+  "file": "/home/aho/work/workshop-dds/cpp/conan/solution/DiscoveryServer/main.cpp",
+  "output": "solution/DiscoveryServer/CMakeFiles/DiscoveryServer.dir/main.cpp.o"
+}
+]

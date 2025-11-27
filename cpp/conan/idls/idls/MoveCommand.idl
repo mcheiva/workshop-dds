@@ -1,0 +1,10 @@
+module EIVA {
+    module Game {
+        struct MoveCommand
+        {
+            int32 player_id;
+            float dir_x;
+            float dir_y;
+        };
+    };
+};
