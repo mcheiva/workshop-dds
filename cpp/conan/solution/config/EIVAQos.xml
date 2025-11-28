@@ -16,7 +16,7 @@
 							<!-- Set REMOTE SERVER's listening locator for PDP -->
 							<locator>
 								<udpv4>
-									<address>10.10.180.88</address>
+									<address>10.10.182.109</address>
 									<port>14520</port>
 								</udpv4>
 							</locator>

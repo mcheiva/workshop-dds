@@ -78,14 +78,14 @@ void register_WeaponType_type_identifier(
             TypeObjectUtils::add_complete_enumerated_literal(literal_seq_WeaponType, literal_Shield);
         }
         {
-            EnumeratedLiteralFlag flags_SlowFiled = TypeObjectUtils::build_enumerated_literal_flag(false);
-            CommonEnumeratedLiteral common_SlowFiled = TypeObjectUtils::build_common_enumerated_literal(2, flags_SlowFiled);
-            eprosima::fastcdr::optional<AppliedBuiltinMemberAnnotations> member_ann_builtin_SlowFiled;
+            EnumeratedLiteralFlag flags_SlowField = TypeObjectUtils::build_enumerated_literal_flag(false);
+            CommonEnumeratedLiteral common_SlowField = TypeObjectUtils::build_common_enumerated_literal(2, flags_SlowField);
+            eprosima::fastcdr::optional<AppliedBuiltinMemberAnnotations> member_ann_builtin_SlowField;
             ann_custom_WeaponType.reset();
-            MemberName name_SlowFiled = "SlowFiled";
-            CompleteMemberDetail detail_SlowFiled = TypeObjectUtils::build_complete_member_detail(name_SlowFiled, member_ann_builtin_SlowFiled, ann_custom_WeaponType);
-            CompleteEnumeratedLiteral literal_SlowFiled = TypeObjectUtils::build_complete_enumerated_literal(common_SlowFiled, detail_SlowFiled);
-            TypeObjectUtils::add_complete_enumerated_literal(literal_seq_WeaponType, literal_SlowFiled);
+            MemberName name_SlowField = "SlowField";
+            CompleteMemberDetail detail_SlowField = TypeObjectUtils::build_complete_member_detail(name_SlowField, member_ann_builtin_SlowField, ann_custom_WeaponType);
+            CompleteEnumeratedLiteral literal_SlowField = TypeObjectUtils::build_complete_enumerated_literal(common_SlowField, detail_SlowField);
+            TypeObjectUtils::add_complete_enumerated_literal(literal_seq_WeaponType, literal_SlowField);
         }
         CompleteEnumeratedType enumerated_type_WeaponType = TypeObjectUtils::build_complete_enumerated_type(enum_flags_WeaponType, header_WeaponType,
                 literal_seq_WeaponType);

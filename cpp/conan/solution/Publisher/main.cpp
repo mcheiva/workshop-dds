@@ -1,6 +1,5 @@
 #include <iostream>
 #include <chrono>
-#include <windows.h>
 
 // Include DDSBus Fast DDS headers
 #include <ddsbus/fastdds/Participant.hpp>
@@ -15,13 +14,30 @@
 
 constexpr int playerId = 69;
 
-// Helper to detect fresh key press (press, not hold)
-bool is_key_pressed(int vkey, bool &oldState) {
-    bool down = (GetAsyncKeyState(vkey) & 0x8000) != 0;
-    bool pressed = down && !oldState;
-    oldState = down;
-    return pressed;
-}
+// Forward declare only the needed WinAPI function
+extern "C" __declspec(dllimport) short __stdcall GetAsyncKeyState(int vkey);
+
+// Define keycode constants to avoid windows.h macro pollution
+constexpr int VK_SPACE = 0x20;
+
+class GameListener : public ddsbus::core::DataWriterListener
+{
+public:
+    GameListener() = default;
+private:
+    void on_publication_matched(const eprosima::fastdds::dds::PublicationMatchedStatus &status) override
+    {
+        std::cout << "[Publisher] Match status changed: "
+        << status.current_count << " subscriber(s) connected. "
+        << status.total_count << " total connection(s)\n";
+    }
+
+    void on_offered_incompatible_qos(const eprosima::fastdds::dds::OfferedIncompatibleQosStatus &status) override
+    {
+        std::cout << "[Publisher] Incompatible QoS offered. Total count: "
+        << status.total_count << ", last violated policy ID: " << status.last_policy_id << '\n';
+    }
+};
 
 int main(int argc, char **argv)
 {
@@ -34,7 +50,8 @@ int main(int argc, char **argv)
         ddsbus::fastdds::Participant::get_participant_extended_qos_from_default_profile();
 
     // Spawn DomainParticipant with the retrieved QoS
-    ddsbus::fastdds::Participant participant(domainParticipantExtendedQos, nullptr, eprosima::fastdds::dds::StatusMask::none());    ddsbus::fastdds::Publisher publisher = participant.create_publisher();
+    ddsbus::fastdds::Participant participant(domainParticipantExtendedQos);    
+    ddsbus::fastdds::Publisher publisher = participant.create_publisher();
 
     //ddsbus::fastdds::Participant participant(0);
     //ddsbus::fastdds::Publisher publisher = participant.create_publisher();
@@ -42,8 +59,10 @@ int main(int argc, char **argv)
     ddsbus::fastdds::Topic<EIVA::Game::MoveCommandPubSubType> moveTopic = participant.create_topic<EIVA::Game::MoveCommandPubSubType>("MCH/EIVA/Game/MoveCommand");
     ddsbus::fastdds::Topic<EIVA::Game::WeaponCommandPubSubType> weaponTopic = participant.create_topic<EIVA::Game::WeaponCommandPubSubType>("MCH/EIVA/Game/WeaponCommand");
 
-    ddsbus::fastdds::DataWriter<EIVA::Game::MoveCommandPubSubType> moveCommandWritter = publisher.create_datawriter(moveTopic);
-    ddsbus::fastdds::DataWriter<EIVA::Game::WeaponCommandPubSubType> weaponCommandWritter = publisher.create_datawriter(weaponTopic);
+    GameListener moveListener;
+    GameListener weaponListener;
+    ddsbus::fastdds::DataWriter<EIVA::Game::MoveCommandPubSubType> moveCommandWritter = publisher.create_datawriter(moveTopic, &moveListener);
+    ddsbus::fastdds::DataWriter<EIVA::Game::WeaponCommandPubSubType> weaponCommandWritter = publisher.create_datawriter(weaponTopic, &weaponListener);
 
     // Create data sample to publish
     EIVA::Game::WeaponCommand gun;
@@ -54,19 +73,26 @@ int main(int argc, char **argv)
     shield.weapon(EIVA::Game::WeaponType::Shield);
     EIVA::Game::WeaponCommand slow;
     slow.player_id(playerId);
-    slow.weapon(EIVA::Game::WeaponType::SlowFiled);
+    slow.weapon(EIVA::Game::WeaponType::SlowField);
 
     bool running = true;
     // Old key states for edge-detection
     bool oldSpace = false, oldJ = false, oldK = false, oldP = false;
+
+    auto is_key_pressed = [](int vkey, bool &oldState) {
+        bool down = (GetAsyncKeyState(vkey) & 0x8000) != 0;
+        bool pressed = down && !oldState;
+        oldState = down;
+        return pressed;
+    };
 
     while (running) {
         // Movement direction: combine keys
         int x = 0, y = 0;
         if (GetAsyncKeyState('D') & 0x8000) x += 1;
         if (GetAsyncKeyState('A') & 0x8000) x -= 1;
-        if (GetAsyncKeyState('W') & 0x8000) y += 1;
-        if (GetAsyncKeyState('S') & 0x8000) y -= 1;
+        if (GetAsyncKeyState('W') & 0x8000) y -= 1;
+        if (GetAsyncKeyState('S') & 0x8000) y += 1;
 
         // Always send move command (so holding keys keeps moving)
         EIVA::Game::MoveCommand cmd;
@@ -94,7 +120,7 @@ int main(int argc, char **argv)
             std::cout << "Quitting...\n";
         }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(33)); // ~30Hz
+        std::this_thread::sleep_for(std::chrono::milliseconds(15));
     }
 
     return 0;

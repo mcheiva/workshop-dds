@@ -61,7 +61,7 @@ enum class WeaponType : int32_t
 {
     Gun,
     Shield,
-    SlowFiled
+    SlowField
 };
 /*!
  * @brief This class represents the structure WeaponCommand defined by the user in the IDL file.
