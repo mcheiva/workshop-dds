@@ -28,14 +28,19 @@ class EivaFastDDSGenConan(ConanFile):
     }
 
     def requirements(self):
-        self.requires("eiva-fast-dds/3.1.0")
+        pass
         
+
     def config_options(self):
         if self.settings.os == "Windows":
             del self.options.fPIC
 
     def source(self):
-        pass
+        git_url = "https://github.com/eivacom/Fast-DDS-Gen"
+        git_hash = "feature/CSharpSupport"
+
+        self.run(f"git clone --recursive {git_url} Fast-DDS-Gen")
+        self.run(f"cd Fast-DDS-Gen && git checkout {git_hash}")
         
     def build_requirements(self):
         self.tool_requires("openjdk/19.0.2")
@@ -45,17 +50,11 @@ class EivaFastDDSGenConan(ConanFile):
             self.options.rm_safe("fPIC")
     
     def layout(self):
-        cmake_layout(self, src_folder=".", build_folder="build-fastddsgen")
+        cmake_layout(self, src_folder=".", build_folder="build-fastddsgen-compile")
 
     def generate(self):
-        tc = CMakeToolchain(self)
-        tc.variables["BUILD_SHARED_LIBS"] = self.options.shared
-        tc.generate()
-        tc = CMakeDeps(self)
-        tc.check_components_exist = True
-        tc.generate()
+        pass
     
     def build(self):
-        cmake = CMake(self)
-        cmake.configure()
-        cmake.build()
+        gradle_wrapper = os.path.join(self.source_folder, "Fast-DDS-Gen", "gradlew")
+        self.run(f"{gradle_wrapper} assemble", cwd=os.path.join(self.source_folder, "Fast-DDS-Gen"))

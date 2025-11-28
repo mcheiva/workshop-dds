@@ -380,3 +380,4 @@ cpp/msvc/Solution/Publisher/EIVAQos.xml
 cpp/msvc/Solution/Subscriber/EIVAQos.xml
 cpp/msvc/Solution/DiscoveryServer/EIVAQos.xml
 cpp/msvc/Solution/DomainDiscovery/EIVAQos.xml
+/csharp/IDL/build-fastddsgen-compile

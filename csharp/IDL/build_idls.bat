@@ -30,7 +30,8 @@ if exist include (
 )
 
 if not exist Fast-DDS-Gen (
-	conan source conanfile_fastddsgen.py
+	conan source conanfile_fastddsgen_compile.py
+	conan build conanfile_fastddsgen_compile.py -pr:a=Visual-Studio-2022-v143-x64-Release --build=missing
 ) else (
     echo Fast-DDS-Gen already sourced
 )
