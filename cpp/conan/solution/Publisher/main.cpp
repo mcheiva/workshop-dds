@@ -12,9 +12,7 @@
 #include <idls/WeaponCommandPubSubTypes.hpp>
 #include <thread>
 
-constexpr int playerId = 69;
-
-// Forward declare only the needed WinAPI function
+constexpr int playerId = 69;// Forward declare only the needed WinAPI function
 extern "C" __declspec(dllimport) short __stdcall GetAsyncKeyState(int vkey);
 
 // Define keycode constants to avoid windows.h macro pollution
@@ -89,10 +87,10 @@ int main(int argc, char **argv)
     while (running) {
         // Movement direction: combine keys
         int x = 0, y = 0;
-        if (GetAsyncKeyState('D') & 0x8000) x += 1;
-        if (GetAsyncKeyState('A') & 0x8000) x -= 1;
-        if (GetAsyncKeyState('W') & 0x8000) y -= 1;
-        if (GetAsyncKeyState('S') & 0x8000) y += 1;
+        if (GetAsyncKeyState('F') & 0x8000) x += 1;
+        if (GetAsyncKeyState('S') & 0x8000) x -= 1;
+        if (GetAsyncKeyState('E') & 0x8000) y -= 1;
+        if (GetAsyncKeyState('D') & 0x8000) y += 1;
 
         // Always send move command (so holding keys keeps moving)
         EIVA::Game::MoveCommand cmd;
